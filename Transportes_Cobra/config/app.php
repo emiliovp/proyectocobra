@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => 'Transportes Cobra',
 
     /*
     |--------------------------------------------------------------------------
@@ -26,7 +26,8 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    // 'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'development'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +40,8 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+//    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -161,7 +163,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        Yajra\DataTables\DataTablesServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -223,7 +225,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ],
 
 ];

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-class HomeController extends Controller
+use Yajra\Datatables\Datatables;
+use App\CalUserLogin;
+class UserController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -23,6 +24,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('usuarios.lista');  //->with(['alat' => 0]);
+    }
+    public function anyData()
+    {
+        $a = new CalUserLogin;
+            $data = $a->getuser();
+
+        return Datatables::of($data)->make(true);
     }
 }

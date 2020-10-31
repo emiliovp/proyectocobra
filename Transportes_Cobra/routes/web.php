@@ -12,9 +12,16 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::group(['prefix' => 'usuarios'], function(){
+    Route::get('/lista','UserController@index')->name('ListaUsuarios'); // ->middleware('doublesession');
+    Route::get('/anyData',  'UserController@anyData')->name('listusers');
+});
