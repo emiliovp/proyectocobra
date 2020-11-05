@@ -30,7 +30,8 @@ class perfil extends Model
         $sql= perfil::select([
             'perfil.id AS perfil_id',
             'perfil.nombre AS nombre_perfil',  
-            'area.nombre AS area'
+            'area.nombre AS area',
+            DB::raw('concat(perfil.nombre," / ", area.nombre) AS per_area'),
         ])
         ->join('area', 'area.id', '=', 'perfil.area_id')
         ->where('perfil.estatus','=', 1)

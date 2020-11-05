@@ -107,11 +107,11 @@ var buttonCommon = {
             })
         ]
     });
-    $('#altaPerf').click(function()
-    {
-        var url = '{!!route('nuevoperfil')!!}';
-        $( location).attr("href",url);
-    });
+$('#altaPerf').click(function()
+{
+    var url = '{!!route('nuevoperfil')!!}';
+    $( location).attr("href",url);
+});
 $(document).on("click", "#bajaper", function(){
     swal({
         title: '¿Esta seguro de eliminar el área?',

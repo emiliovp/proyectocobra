@@ -23,6 +23,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'usuarios'], function(){
     Route::get('/lista','UserController@index')->name('ListaUsuarios'); // ->middleware('doublesession');
     Route::get('/anyData',  'UserController@anyData')->name('listusers');
+    Route::get('/nuevo',  'UserController@nuevo')->name('nuevousuario');
+    Route::post('/stored',  'UserController@stored')->name('storedusuario');
+    Route::post('/baja',  'UserController@baja_usr')->name('bajausr');
 });
 Route::group(['prefix' => 'perfiles'], function(){
     Route::get('/lista','PerfilController@index')->name('PerfilesUsuarios'); // ->middleware('doublesession');
