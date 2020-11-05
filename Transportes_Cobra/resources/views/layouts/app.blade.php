@@ -10,14 +10,39 @@
     <title>{{ config('app.name', 'Transportes Cobra') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+    <!-- jquery-ui -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Adicionales datatables -->
+    <script src="{{ asset('js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('js/adicionales_datatables/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('js/adicionales_datatables/jszip.min.js') }}"></script>
+    <script src="{{ asset('js/adicionales_datatables/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('js/adicionales_datatables/vfs_fonts.js') }}"></script>
+    <!--alert-->
+    <script src="{{ asset('js/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <!-- end alert-->
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/general.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <!-- Adicionales datatables -->
+    <link href="{{ asset('css/buttons.dataTables.min.css') }}" rel="stylesheet">
+    <!-- css jquery ui -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <!-- end css jquery ui -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('js/sweetalert2/dist/sweetalert2.min.css') }}">
+    <!-- css alert -->
+    <link rel="stylesheet" href="{{ asset('js/sweetalert2/dist/sweetalert2.min.css') }}">
+    <!-- end css alert -->
+    <script src="{{ asset('js/loading.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/loading.css') }}">
 </head>
 <body>
     <div id="app">
@@ -76,6 +101,21 @@
             @yield('content')
         </main>
     </div>
+    <script>
+    function mostrarError(id = null) {
+        $("#"+id).addClass("error-msj-activo");
+        $("#"+id).removeClass("error-msj-inactivo");
+    }
+    function ocultarError(id = null) {
+        $("#"+id).removeClass("error-msj-activo");
+        $("#"+id).addClass("error-msj-inactivo");
+    }
+    </script>
     @stack('scripts')
+    <div id="content-loading" class="text-center loading_hide">
+        <div id="loading-logo">
+            <img src="{{ asset('images/procesando.gif') }}"/>
+        </div>
+    </div>
 </body>
 </html>

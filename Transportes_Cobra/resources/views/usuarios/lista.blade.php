@@ -86,15 +86,15 @@ var buttonCommon = {
         dom: 'Blfrtip',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todo"]],
         buttons: [
-            $.extend(true, {}, buttonCommon, {
+            /*$.extend(true, {}, buttonCommon, {
                 extend: "copyHtml5"
-            }), 
+            }),*/ 
             $.extend(true, {}, buttonCommon, {
                 extend: "csvHtml5"
             }), 
-            $.extend(true, {}, buttonCommon, {
+            /*$.extend(true, {}, buttonCommon, {
                 extend: "excelHtml5"
-            }), 
+            }),*/ 
             $.extend(true, {}, buttonCommon, {
                 extend: "pdfHtml5"
             })

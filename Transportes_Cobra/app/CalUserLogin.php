@@ -32,6 +32,7 @@ class CalUserLogin extends Model
     
     public function getuser(){
         $sql= CalUserLogin::select([
+
             DB::raw('concat(usuario.nombre," ",usuario.aPaterno," ",usuario.aMaterno) as nombre_completo'),
             'usuario.username',
             'perfil.nombre AS nperfil',
@@ -41,5 +42,6 @@ class CalUserLogin extends Model
         ->join('area', 'area.id', '=', 'perfil.area_id')
         ->get()
         ->toArray();
+        return $sql;
     }
 }

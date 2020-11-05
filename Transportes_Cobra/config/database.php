@@ -42,8 +42,8 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'host' => '127.0.0.1',
+            'port' => '3306',
             'database' => 'transportesCobra',
             'username' => 'userCobra',
             'password' => 'Cobr4Tr4n5p0rt35.',

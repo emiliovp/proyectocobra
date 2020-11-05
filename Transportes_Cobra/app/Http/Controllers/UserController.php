@@ -29,7 +29,7 @@ class UserController extends Controller
     public function anyData()
     {
         $a = new CalUserLogin;
-            $data = $a->getuser();
+        $data = $a->getuser();
 
         return Datatables::of($data)->make(true);
     }
