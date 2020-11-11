@@ -19,6 +19,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home/{id}', 'HomeController@index')->name('hijo');
 
 Route::group(['prefix' => 'usuarios'], function(){
     Route::get('/lista','UserController@index')->name('ListaUsuarios'); // ->middleware('doublesession');
@@ -41,4 +42,21 @@ Route::group(['prefix' => 'areas'], function(){
     Route::post('/stored', 'AreaController@stored')->name('storedareas');
     Route::post('/editar',  'AreaController@updated')->name('editararea');
     Route::post('/baja',  'AreaController@baja_area')->name('bajaararea');
+});
+Route::group(['prefix' => 'catalogos'], function(){
+    /**Administración de catálogos */
+    Route::get('/lista','CatalogoController@index')->name('catalogos'); // ->middleware('doublesession');
+    Route::get('/anyData', 'CatalogoController@anyData')->name('listacata');
+    Route::post('/stored', 'CatalogoController@stored')->name('storedcatalogo');   
+    Route::post('/editar',  'CatalogoController@updated')->name('editacatalogo');
+    Route::post('/baja',  'CatalogoController@baja_catalog')->name('bajacatalogo');
+    //**Administración de opciones */
+    Route::get('/listaopciones/{id}', 'OpcionesCatalogosController@index')->name('listaopciones');
+    Route::get('/dataIndexOptCat', 'OpcionesCatalogosController@dataIndexOptCat')->name('dataIndexOptCat');
+    Route::get('/altaopt/{id}', 'OpcionesCatalogosController@altaOpcion')->name('altaopciones');
+    Route::get('/opbycat',    'OpcionesCatalogosController@OptionByCatId')->name('opByCat');
+    Route::post('/storeoptcat', 'OpcionesCatalogosController@storeoptcat')->name('storeoptcat');
+    Route::get('/editaropt/{id}/{opt}', 'OpcionesCatalogosController@editarOpcion')->name('editaropciones');
+    Route::post('/updateoptcat', 'OpcionesCatalogosController@updateoptcat')->name('updateoptcat');
+    Route::put('/eliminacionopciones', 'OpcionesCatalogosController@deleteoptcat')->name('eliminarOptCatalogos');    
 });

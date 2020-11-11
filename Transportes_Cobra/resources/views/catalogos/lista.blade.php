@@ -6,23 +6,23 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    Lista de áreas.
+                    Lista de catálogos.
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-lg-12 text-right">
                             <a class="btn btn-warning" style="color:#FFFFFF;" href="{{ route('home') }}">Regresar</a>
-                            <button class="btn btn-success mov-area" id="altaPerf">Alta de área</button>
+                            <button class="btn btn-success mov-area" id="altaPerf">Alta de catálogos</button>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12 table-responsive">
-                            <table class="table table-bordered" id="area-table">
+                            <table class="table table-bordered" id="catalogo-table">
                                 <thead>
                                     <tr>
                                         <th>id</th>
-                                        <th>Área</th>
-                                        <th>Editar</th>
+                                        <th>Catálogo</th>
+                                        <th>Acciones</th>
                                         <th>Eliminar</th>
                                     </tr>
                                 </thead>
@@ -50,7 +50,7 @@ var buttonCommon = {
             },
         }
     };
-    var table = $('#area-table').DataTable({
+    var table = $('#catalogo-table').DataTable({
         language: {
             url: "{{ asset('json/Spanish.json') }}",
             buttons: {
@@ -63,7 +63,7 @@ var buttonCommon = {
         },
         processing: true,
         serverSide: true,
-        ajax: '{!! route("listaareas") !!}',
+        ajax: '{!! route("listacata") !!}',
         columns: [
             {data: 'id', name: 'id'}, 
             {data: 'nombre',  name: 'nombre'},
@@ -71,9 +71,12 @@ var buttonCommon = {
                 render: function (data,type,row){
                     var html = '';
                     html = '<div class="row">'+
-                            '<div class="col-md-12">'+
-                                '<button class="btn btn-primary btn-block mov-area" id="editarea" name="editarea" data-movimiento="editar" data-desarea="'+row.descripcion+'" data-nomarea="'+row.nombre+'" data-idarea="'+row.id+'">Editar</button>'+
-                            '</div>'+
+                                '<div class="col-md-6">'+
+                                    '<button class="btn btn-primary btn-block mov-area" id="editarea" name="editarea" data-movimiento="editar" data-desarea="'+row.descripcion+'" data-nomarea="'+row.nombre+'" data-idarea="'+row.id+'">Editar</button>'+
+                                '</div>'+
+                                '<div class="col-md-6">'+
+                                    '<a href="{{url("catalogos/listaopciones")}}/'+row.id+'" class="btn btn-default filter-button">Ver opciones </a>'+
+                                '</div>'+
                            '</div>';
 
                     return html;
@@ -118,22 +121,16 @@ var buttonCommon = {
             if (desc == 'null') {
                 desc = '';
             }
-            var titulo="Editar área";
+            var titulo="Editar catálogo";
             var cuerpo = '<div class="container" style="margin-top: 10px;">'+
                     '<form method="post" action="">'+
                     '<div class="form-group row">'+
                         '<div class="col-md-12">'+
-                            '<label for="nombreArea" class="col-lg-12 col-form-label text-left txt-bold">Nombre del área</label>'+
-                            '<input type="text" class="form-control" name="nombreArea" value="'+nom+'" id="nombreArea"/>'+
-                            '<span id="errmsj_area" class="error-msj" role="alert">'+
-                                '<strong>Favor de ingresar un nombre de área</strong>'+
+                            '<label for="nombrecat" class="col-lg-12 col-form-label text-left txt-bold">Nombre del área</label>'+
+                            '<input type="text" class="form-control" name="nombrecat" value="'+nom+'" id="nombrecat"/>'+
+                            '<span id="errmsj_cat" class="error-msj" role="alert">'+
+                                '<strong>Favor de ingresar un nombre de catálogo</strong>'+
                             '</span>'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="form-group row">'+
-                        '<div class="col-md-12">'+
-                            '<label for="descipcionArea" class="col-lg-12 col-form-label text-left txt-bold">Descripción del área</label>'+
-                            '<input type="text" class="form-control" value="'+desc+'" name="descipcionArea" id="descipcionArea"/>'+
                         '</div>'+
                     '</div>'+
                     '<div class="form-group row">'+
@@ -147,22 +144,16 @@ var buttonCommon = {
                     '</form>'+
                 '</div>';
         }else{
-            var titulo="Alta de área";
+            var titulo="Alta de catálogo";
             var cuerpo = '<div class="container" style="margin-top: 10px;">'+
                     '<form method="post" action="">'+
                     '<div class="form-group row">'+
                         '<div class="col-md-12">'+
-                            '<label for="nombreArea" class="col-lg-12 col-form-label text-left txt-bold">Nombre del área</label>'+
-                            '<input type="text" class="form-control" name="nombreArea" id="nombreArea"/>'+
-                            '<span id="errmsj_area" class="error-msj" role="alert">'+
-                                '<strong>Favor de ingresar un nombre de área</strong>'+
+                            '<label for="nombrecat" class="col-lg-12 col-form-label text-left txt-bold">Nombre del catálogo</label>'+
+                            '<input type="text" class="form-control" name="nombrecat" id="nombrecat"/>'+
+                            '<span id="errmsj_cat" class="error-msj" role="alert">'+
+                                '<strong>Favor de ingresar un nombre de catálogo</strong>'+
                             '</span>'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="form-group row">'+
-                        '<div class="col-md-12">'+
-                            '<label for="descipcionArea" class="col-lg-12 col-form-label text-left txt-bold">Descripción del área</label>'+
-                            '<input type="text" class="form-control" name="descipcionArea" id="descipcionArea"/>'+
                         '</div>'+
                     '</div>'+
                     '<div class="form-group row">'+
@@ -189,12 +180,10 @@ var buttonCommon = {
     });
 $(document).on("click", "#guardar", function(){
 
-    var nombrearea = $("#nombreArea").val();
-    var descripcionarea = $("#descipcionArea").val();
-
+    var nombrecat = $("#nombrecat").val();
     var mov = $(this).attr("data-movimiento");
-    if (nombrearea == '') {
-        mostrarError("errmsj_area");
+    if (nombrecat == '') {
+        mostrarError("errmsj_cat");
     }else{
         $.ajaxSetup({
             headers: {
@@ -206,9 +195,9 @@ $(document).on("click", "#guardar", function(){
             var id = $(this).attr("data-idarea");
             var ajax = $.ajax({
                 type: 'POST',
-                data: {nombre: nombrearea, id:id, descripcion: descripcionarea},
-                url: '{{ route("editararea") }}',
-                async: false,
+                data: {nombre: nombrecat, id:id},
+                url: '{{ route("editacatalogo") }}',
+                async: true,
                 beforeSend: function(){
                     mostrarLoading();
                 },
@@ -220,19 +209,18 @@ $(document).on("click", "#guardar", function(){
             var tittle = 'Alta';
             var ajax = $.ajax({
                 type: 'POST',
-                data: {nombre: nombrearea, descipcion: descripcionarea},
-                url: '{{ route("storedareas") }}',
-                async: false,
+                data: {nombre: nombrecat},
+                url: '{{ route("storedcatalogo") }}',
+                async: true,
                 beforeSend: function(){
-
+                    mostrarLoading();
                 },
                 complete: function(){
-
+                    ocultarLoading();
                 }
             });
         }
         ajax.done(function(response){
-
             if(response == true) {
                 table.ajax.reload();
                 swal(
@@ -243,7 +231,7 @@ $(document).on("click", "#guardar", function(){
             }else if(response == 2){
                 swal(
                     'Error',
-                    'Esta área ya fue dada de alta, favor de ingresar otra',
+                    'Este catálogo ya fue dado de alta, favor de ingresar otra',
                     'error'
                 )
             } 
@@ -259,7 +247,7 @@ $(document).on("click", "#guardar", function(){
 });
 $(document).on("click", "#baja", function(){
     swal({
-        title: '¿Esta seguro de eliminar el área?',
+        title: '¿Esta seguro de eliminar el catálogo?',
         text: 'Esta operación no se podra revertir',
         type: 'warning',
         showCancelButton: true,
@@ -277,8 +265,8 @@ $(document).on("click", "#baja", function(){
             var ajax = $.ajax({
                 type: 'POST',
                 data: {id: id},
-                url: '{{ route("bajaararea") }}',
-                async: false,
+                url: '{{ route("bajacatalogo") }}',
+                async: true,
                 beforeSend: function(){
                     mostrarLoading();
                 },
@@ -290,7 +278,7 @@ $(document).on("click", "#baja", function(){
                 if(response == 1) {
                     table.ajax.reload();
                     swal(
-                        tittle,
+                        'Baja',
                         'La operación se ha realizado con éxito',
                         'success'
                     )

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Hash;
 use App\CalUserLogin;
 use App\perfil;
 use Session;
@@ -72,7 +73,7 @@ class UserController extends Controller
         $datausr['aPaterno'] = substr($apaterno,0,128);
         $datausr['aMaterno'] = substr($amaterno,0,128);
         $datausr['username'] = substr($usr,0,128);
-        $datausr['password'] = substr($pass,0,128);
+        $datausr['password'] =  Hash::make($pass);
         $datausr['correo'] = substr($correo,0,128);
         $datausr['telefono'] = substr($tel,0,15);
         $datausr['ext'] = substr($ext,0,15);

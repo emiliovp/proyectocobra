@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\CalUserLogin;
 use App\perfil;
-class HomeController extends Controller
+class moduloController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -24,7 +24,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index($id_mod = null)
+    public function index(Request $request)
     {
         $a = new CalUserLogin;
         $idusr = Auth::user()->usuario_id;
@@ -35,8 +35,9 @@ class HomeController extends Controller
         }
         return view('home')->with(['datos' => $datos]);
     }
-    public function modhijo($id_mod = null)
+    public function modhijo(Request $request)
     {
+        dd($request);
         $a = new CalUserLogin;
         $idusr = Auth::user()->usuario_id;
         if ($id_mod != null) {

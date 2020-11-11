@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-<div id="success">
+    <div id="success">
         <div class="col-sm-12">
             @if(Session::has('success'))
             <div class="alert alert-success" role="alert"> 

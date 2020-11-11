@@ -45,6 +45,44 @@ class CalUserLogin extends Model
         ->toArray();
         return $sql;
     }
+    public function getuser_validate($usr){
+        $sql= CalUserLogin::select(['usuario.id as id_usr',
+            DB::raw('concat(usuario.nombre," ",usuario.aPaterno," ",usuario.aMaterno) as nombre_completo'),
+            'usuario.username',
+            'usuario.password',
+            'perfil.id AS id_perfil',
+            'perfil.nombre AS nperfil',
+            'area.id AS id_area',
+            'area.nombre AS narea'
+        ])
+        ->distinct()
+        ->join('perfil', 'perfil.id', '=', 'usuario.perfil_id')
+        ->join('area', 'area.id', '=', 'perfil.area_id')
+        ->where('usuario.estatus', '=', 1)
+        ->where('usuario.username', '=', $usr)
+        ->get()
+        ->toArray();
+        return $sql;
+    }
+    public function getuserid($usr){
+        $sql= CalUserLogin::select(['usuario.id as id_usr',
+            DB::raw('concat(usuario.nombre," ",usuario.aPaterno," ",usuario.aMaterno) as nombre_completo'),
+            'usuario.username',
+            'usuario.password',
+            'perfil.id AS id_perfil',
+            'perfil.nombre AS nperfil',
+            'area.id AS id_area',
+            'area.nombre AS narea'
+        ])
+        ->distinct()
+        ->join('perfil', 'perfil.id', '=', 'usuario.perfil_id')
+        ->join('area', 'area.id', '=', 'perfil.area_id')
+        ->where('usuario.estatus', '=', 1)
+        ->where('usuario.id', '=', $usr)
+        ->get()
+        ->toArray();
+        return $sql;
+    }
     public function setUsuario($datau){
         try{
             $data = CalUserLogin::create($datau);
@@ -71,5 +109,45 @@ class CalUserLogin extends Model
         }
 
         return false;
+    }
+    public function getInfUsr($idusr, $id_mod = null){
+        if ($id_mod == null) {
+            $sql = CalUserLogin::select([
+                DB::raw('CONCAT(usuario.nombre," ", usuario.aPaterno," ", usuario.aMaterno) as nombre_usuario'),
+                'usuario.username','usuario.correo', 'usuario.telefono', 'usuario.ext', 'perfil.nombre AS nombre_perfil',
+                'area.nombre AS nombre_area', 'modulo.nombre AS nombre_modulo', 'modulo.descripcion AS des_mod',
+                'modulo.icono','modulo.ruta', 'modulo.padre'
+            ])
+            ->join('perfil','perfil.id', '=', 'usuario.perfil_id')
+            ->join('area', 'area.id', '=', 'perfil.area_id')
+            ->join('rel_perfil_modulo', 'rel_perfil_modulo.perfil_id', '=', 'perfil.id')
+            ->join('modulo', 'modulo.id', '=', 'rel_perfil_modulo.modulo_id')
+            ->where('usuario.estatus','=',1)
+            ->where('perfil.estatus','=',1)
+            ->where('usuario.id','=',$idusr)
+            ->where('modulo.padre','=',NULL)
+            ->where('modulo.ruta','<>',NULL)
+            ->get()
+            ->toArray();
+        }else{
+            $sql = CalUserLogin::select([
+                DB::raw('CONCAT(usuario.nombre," ", usuario.aPaterno," ", usuario.aMaterno) as nombre_usuario'),
+                'usuario.username','usuario.correo', 'usuario.telefono', 'usuario.ext', 'perfil.nombre AS nombre_perfil',
+                'area.nombre AS nombre_area', 'modulo.nombre AS nombre_modulo', 'modulo.descripcion AS des_mod',
+                'modulo.icono','modulo.ruta', 'modulo.padre'
+            ])
+            ->join('perfil','perfil.id', '=', 'usuario.perfil_id')
+            ->join('area', 'area.id', '=', 'perfil.area_id')
+            ->join('rel_perfil_modulo', 'rel_perfil_modulo.perfil_id', '=', 'perfil.id')
+            ->join('modulo', 'modulo.id', '=', 'rel_perfil_modulo.modulo_id')
+            ->where('usuario.estatus','=',1)
+            ->where('perfil.estatus','=',1)
+            ->where('usuario.id','=',$idusr)
+            ->where('modulo.padre','=',$id_mod)
+            ->where('modulo.ruta','<>',NULL)
+            ->get()
+            ->toArray();
+        }
+        return $sql;
     }
 }
