@@ -26,6 +26,8 @@ Route::group(['prefix' => 'usuarios'], function(){
     Route::get('/anyData',  'UserController@anyData')->name('listusers');
     Route::get('/nuevo',  'UserController@nuevo')->name('nuevousuario');
     Route::post('/stored',  'UserController@stored')->name('storedusuario');
+    Route::get('/editar/{id}',  'UserController@updusr')->name('editusr');
+    Route::post('/update',  'UserController@updateusuario')->name('editarusuario');
     Route::post('/baja',  'UserController@baja_usr')->name('bajausr');
 });
 Route::group(['prefix' => 'perfiles'], function(){

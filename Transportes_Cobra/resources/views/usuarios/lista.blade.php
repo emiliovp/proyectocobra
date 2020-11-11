@@ -83,9 +83,12 @@ var buttonCommon = {
                 render: function (data,type,row){
                     var html = '';
                     html = '<div class="row">'+
-                            '<div class="col-md-12">'+
-                                '<button class="btn btn-danger btn-block btn-baja" id="bajausr" name="bajausr" data-idusr="'+row.id_usr+'">Baja</button>'+
-                            '</div>'+
+                                '<div class="col-md-6">'+
+                                '<a href="{{url("/usuarios/editar")}}/'+row.id_usr+'" class="btn btn-primary btn-block" id="editarlink" name="editarusr" data-id="'+row.id_usr+'">Editar</a>'+
+                                '</div>'+
+                                '<div class="col-md-6">'+
+                                    '<button class="btn btn-danger btn-block btn-baja" id="bajausr" name="bajausr" data-idusr="'+row.id_usr+'">Baja</button>'+
+                                '</div>'+
                            '</div>';
 
                     return html;

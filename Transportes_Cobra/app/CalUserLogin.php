@@ -66,9 +66,15 @@ class CalUserLogin extends Model
     }
     public function getuserid($usr){
         $sql= CalUserLogin::select(['usuario.id as id_usr',
+            'usuario.nombre',
+            'usuario.aPaterno',
+            'usuario.aMaterno',
             DB::raw('concat(usuario.nombre," ",usuario.aPaterno," ",usuario.aMaterno) as nombre_completo'),
             'usuario.username',
+            'usuario.correo',
             'usuario.password',
+            'usuario.telefono',
+            'usuario.ext',
             'perfil.id AS id_perfil',
             'perfil.nombre AS nperfil',
             'area.id AS id_area',
@@ -79,6 +85,32 @@ class CalUserLogin extends Model
         ->join('area', 'area.id', '=', 'perfil.area_id')
         ->where('usuario.estatus', '=', 1)
         ->where('usuario.id', '=', $usr)
+        ->get()
+        ->toArray();
+        return $sql;
+    }
+    public function getuseridnameupdatevalidate($idusr, $cuenta){
+        $sql= CalUserLogin::select(['usuario.id as id_usr',
+            'usuario.nombre',
+            'usuario.aPaterno',
+            'usuario.aMaterno',
+            DB::raw('concat(usuario.nombre," ",usuario.aPaterno," ",usuario.aMaterno) as nombre_completo'),
+            'usuario.username',
+            'usuario.correo',
+            'usuario.password',
+            'usuario.telefono',
+            'usuario.ext',
+            'perfil.id AS id_perfil',
+            'perfil.nombre AS nperfil',
+            'area.id AS id_area',
+            'area.nombre AS narea'
+        ])
+        ->distinct()
+        ->join('perfil', 'perfil.id', '=', 'usuario.perfil_id')
+        ->join('area', 'area.id', '=', 'perfil.area_id')
+        ->where('usuario.estatus', '=', 1)
+        ->where('usuario.id', '<>', $idusr)
+        ->whereRaw("usuario.username LIKE '".$cuenta."%'")
         ->get()
         ->toArray();
         return $sql;
@@ -149,5 +181,27 @@ class CalUserLogin extends Model
             ->toArray();
         }
         return $sql;
+    }
+    public function updusuario($idusr, $data){
+        try {
+            date_default_timezone_set('America/Mexico_City');
+            $updusuario = CalUserLogin::find($idusr);
+            $updusuario->nombre = $data['nombre']; 
+            $updusuario->aPaterno = $data['aPaterno']; 
+            $updusuario->aMaterno = $data['aMaterno']; 
+            $updusuario->username = $data['username']; 
+            if ($data['password'] != null) {
+                $updusuario->password = $data['password'];
+            } 
+            $updusuario->correo = $data['correo']; 
+            $updusuario->telefono = $data['telefono']; 
+            $updusuario->ext = $data['ext']; 
+            $updusuario->perfil_id = $data['perfil_id'];
+            $updusuario->updated_at = date('yy-m-d H:m:s');
+            $updusuario->save();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 }
