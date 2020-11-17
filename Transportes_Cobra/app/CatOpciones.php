@@ -51,6 +51,17 @@ class CatOpciones extends Model
         ->first()
         ->toArray();
     }
+    public function getOptCatalogoByName($catalogo) {
+        return CatOpciones::select('cat_opciones.id','cat_opciones.nombre')
+        ->join('catalogo','catalogo.id','=','cat_opciones.catalogo_id')
+        ->whereRaw("catalogo.nombre LIKE '".$catalogo."%'")
+        ->where('catalogo.estatus','=',1)
+        ->where('cat_opciones.estatus','=',1)
+        ->groupBy('cat_opciones.nombre')
+        ->groupBy('cat_opciones.id')
+        ->get()
+        ->toArray();
+    }
     public function guardarOpt($nomb, $idCat, $idOptCat = null, $jerarquia) {
         try {
             $opt = new CatOpciones;
@@ -66,6 +77,11 @@ class CatOpciones extends Model
     }
     public function getOptCatalogoByIdOpcion($id) {
         return CatOpciones::where('catalogo_id', '=', $id)
+        ->get()
+        ->toArray();
+    }
+    public function getOptByIdOpcion($id) {
+        return CatOpciones::where('cat_opciones_id', '=', $id)
         ->get()
         ->toArray();
     }
