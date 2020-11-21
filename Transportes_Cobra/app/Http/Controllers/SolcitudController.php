@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Session;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Response;
 
+use App\datosControlInventario;
+use App\RelServicioSolicitud;
+use App\RelClienteBodega;
 use App\CatOpciones;
 use App\Solicitud;
 use App\Clientes;
@@ -79,5 +82,86 @@ class SolcitudController extends Controller
         $a = new CatOpciones;
         $modh = $a->getOptByIdOpcion($request->option);
         print_r(json_encode($modh));
+    }
+    public function stored (Request $request){
+        $a = new RelClienteBodega;
+        $b = new Solicitud;
+        $c = new RelServicioSolicitud;
+        $d = new datosControlInventario;
+        $bodegarel = $a->getBodegaCliente($request->clienteid, $request->bodega);
+        if (count($bodegarel)>0) {
+            $idbodega = $bodegarel[0]['id'];
+        }else{
+            $idbodega = $a->setbodegacliente($request->clienteid, $request->bodega);
+            if ($idbodega == false) {
+                Session::flash('excepcionerror', 'Error al realizar la operación, favor de volver a intentarlo');
+                return redirect()->back()->withInput();
+            }
+        }
+
+        $datosSolicitud = array();
+        $datosSolicitud['fechaHoraProgramada'] = $request->fecprogramada;
+        $datosSolicitud['tipoMercancia'] = $request->tmercancia;
+        $datosSolicitud['lugarSalida'] = $request->salida;
+        $datosSolicitud['destino'] = $request->destino;
+        $datosSolicitud['tipo_movimiento'] = $request->tmovimiento;
+        $datosSolicitud['rel_cliente_bodega_id'] = $idbodega;
+        $idsol = $b->setsolicitud($datosSolicitud);
+        if ($idsol == false) {
+            Session::flash('excepcionerror', 'Error al realizar la operación, favor de volver a intentarlo');
+            return redirect()->back()->withInput();
+        }
+        $servicios = $request->hiddentservicio;
+        $notaserv = $request->hiddenNotasAd;
+        $servicios = explode("_", $servicios);
+        $notasad = explode("_", $notaserv);
+        foreach ($servicios as $key => $value) {
+            if ($notasad[$key] == 0) {
+                $notas = null;
+            }else{
+                $notas = $notasad[$key];
+            }
+            $result = $c->setserviciosol($idsol,$notas,$value);
+            if ($result == false) {
+                Session::flash('excepcionerror', 'Error al realizar la operación, favor de volver a intentarlo');
+                return redirect()->back()->withInput();
+            }
+        }        
+        $controlinv = $request->hiddenidcontrol;
+        $controldesc = $request->hiddenDescripcion;
+        $contenedor = $request->hiddenContenedor;
+        $cantidad = $request->hiddenCantidad;
+        $tproducto = $request->hiddentproducto;
+        $notadinv = $request->hiddennotadinv;
+
+        $controlinv = explode("_", $controlinv);
+        $contdesc = explode("_", $controldesc);
+        $cont = explode("_", $contenedor);
+        $cantidad = explode("_", $cantidad);
+        $tprod = explode("_", $tproducto);
+        $notadinv = explode("_", $notadinv);
+        $datoscontrol = array();
+        foreach ($controlinv as $key => $value) {
+            if ($notadinv[$key] == 0) {
+                $notacontinv = NULL;
+            }else {
+                $notacontinv = $notadinv[$key];
+            }
+            $datoscontrol['solicitud_id'] = $idsol;
+            $datoscontrol['descripcion'] = $contdesc[$key];
+            $datoscontrol['contenedor'] = $cont[$key];
+            $datoscontrol['cantidad'] = $cantidad[$key];
+            $datoscontrol['tipoProducto'] = $tprod[$key];
+            $datoscontrol['notasAd'] = $notacontinv;
+
+            $resultcontinv = $d->setcontrolinv($datoscontrol);
+            if ($resultcontinv == false) {
+                Session::flash('excepcionerror', 'Error al realizar la operación, favor de volver a intentarlo');
+                return redirect()->back()->withInput();
+            }
+        }
+        Session::flash('success', 'La operación se ha realizado con exito');
+        return redirect('solicitud/lista');
+        //dd($request);
     }
 }

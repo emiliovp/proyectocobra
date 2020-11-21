@@ -285,7 +285,6 @@ $(document).on('click', '.quitarlista', function(){
     var valorAfectado = $(idDelAfectado).val();
     var valorAfectadoArray = valorAfectado.split('_');
     var resultAfectado = '';
-    console.log(valorChecks);
     if(valorChecks.length > 0) {
         valorChecks.each(function() {
             resultAfectado = quitarElementos(valorAfectadoArray, $(this).val());

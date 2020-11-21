@@ -68,4 +68,5 @@ Route::group(['prefix' => 'solicitud'], function(){
     Route::get('/autocomplete','SolcitudController@autocomplete')->name('autocomplete');
     Route::get('/getbodega','SolcitudController@getbodegas')->name('getbodega');
     Route::get('/opcion',  'SolcitudController@getopt')->name('getopt');
+    Route::post('/storedsolicitud', 'SolcitudController@stored')->name('storedsolicitud');
 });

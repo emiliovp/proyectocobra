@@ -19,7 +19,7 @@
         overflow-y: auto;
     }
 </style>
-<form method="POST" action="{{route('storedusuario')}}" id="form-solicitud" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="{{route('storedsolicitud')}}" id="form-solicitud" accept-charset="UTF-8" enctype="multipart/form-data">
 @csrf
 <div class="container">
     <div id="success">
@@ -43,7 +43,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <label for="tmovimiento">Tipo de movimiento:</label>
-                            <select class="form-control" name="tmovimiento" id="tmovimiento">
+                            <select class="form-control campo-requerido" name="tmovimiento" id="tmovimiento">
                                 <option value="">Seleccione una opción valida</opcition>
                                     @foreach($movimiento as $val)
                                         @php
@@ -101,7 +101,7 @@
                     <div class="form-group row">
                         <div class="col-md-4">
                             <label for="lsalida">Lugar de salida:</label>
-                            <input class="form-control" name="salida" id="salida" />
+                            <input class="form-control campo-requerido" name="salida" id="salida" />
                             @if ($errors->has('lsalida'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('lsalida')}}</strong>
@@ -162,8 +162,8 @@
                         </div>
                         <div class="col-md-1">
                             <label>&nbsp;</label>
-                            <input type="hidden" name="hiddentservicio" id="hiddentservicio"/>
-                            <input type="hidden" name="hiddenNotasAd" id="hiddenNotasAd"/>
+                            <input type="hidden" class="campo-requerido" name="hiddentservicio" id="hiddentservicio"/>
+                            <input type="hidden" class="campo-requerido" name="hiddenNotasAd" id="hiddenNotasAd"/>
                             <button id="addservivcio" name="addservivcio" type="button" class="form-control btn btn-primary btn-add" disabled><i class="fas fa-plus"></i></button>
                         </div>    
                     </div>
@@ -209,11 +209,33 @@
                         </div>
                         <div class="col-md-2">
                             <label>&nbsp;</label>
-                            <input type="hidden" name="hiddenModuloPad" id="hiddenModuloPad"/>
-                            <input type="hidden" name="hiddenModulo" id="hiddenModulo"/>
-                            <button id="addperfil" type="button" class="form-control btn btn-primary btn-add" disabled>Agregar</button>
+                            <input type="hidden" class="campo-requerido" name="hiddenidcontrol" id="hiddenidcontrol"/>
+                            <input type="hidden" class="campo-requerido" name="hiddenDescripcion" id="hiddenDescripcion"/>
+                            <input type="hidden" class="campo-requerido" name="hiddenContenedor" id="hiddenContenedor"/>
+                            <input type="hidden" class="campo-requerido" name="hiddenCantidad" id="hiddenCantidad"/>
+                            <input type="hidden" class="campo-requerido" name="hiddentproducto" id="hiddentproducto"/>
+                            <input type="hidden" class="campo-requerido" name="hiddennotadinv" id="hiddennotadinv"/>
+                            <button id="addInvDat" type="button" class="form-control btn btn-primary btn-add">Agregar</button>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div id="content_list_control_inv" class="col-md-12"></div>
+
+                            <div class="col-md-12">
+                                <ul id="list_control_inv">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row" style="margin-top:10px;">
+                <div class="col-md-6">
+                    <a href="{{ route('catalogos') }}" class="btn btn-warning btn-block" style="color:#FFFFFF;">{{ __('Regresar') }}</a>
+                </div>
+                <div class="col-md-6">
+                    <input type="button" value="Guardar FUS" id="enviar" class="form-control btn btn-primary" />
                 </div>
             </div>    
         </div>
@@ -283,7 +305,6 @@ $(document).on('change','#tservicio', function(){
     var opt = $(this).val();
     $('#detservicio').empty();
     $('#detservicio').append("<option value=''>Selecciona una opcion valida</option>");
-    console.log(opt);
     if (opt !=="") {
         $.ajax({
             url: "{{ route('getopt') }}",
@@ -325,10 +346,10 @@ $(document).on('focus','.autocomplete',function(){
                             }
                         }else{
                             response = {
-                                    label: item,
-                                    value: item,
-                                    data: "fail"
-                                }
+                                label: item,
+                                value: item,
+                                data: "fail"
+                            }
                         }
                         return response;
                     });
@@ -364,8 +385,8 @@ function getbodega(id){
         }
     });
 }
-$('.btn-add').click(function(){    
-
+$('.btn-add').click(function(){
+    if($(this).attr('id') == "addservivcio") {
         var tipo = 'servicio';
         var hiddenIdTipo = '#hiddentservicio';
         var selectSelectedIdTipo = '#tservicio option:selected';
@@ -414,12 +435,78 @@ $('.btn-add').click(function(){
                 'warning'
             )
         }
+    }else if( $(this).attr('id')  == "addInvDat"){
+        var tipo = 'inventario';
+        var hiddenIdTipo = '#hiddenidcontrol';
+        var ulIdTipo = '#list_control_inv';
+
+        var descp = $('#descripcion').val();
+        var contenedor = $('#contenedor').val();
+        var cantidad = $('#cantidad').val();
+        var tipo_producto = $('#tproducto').val();
+        var notas_adicionales_inv = $('#notasadinv').val();
+        
+        var valor_desc = $('#hiddenDescripcion').val();
+        var valor_cont = $('#hiddenContenedor').val();
+        var valor_cant = $('#hiddenCantidad').val();
+        var valor_tprod = $('#hiddentproducto').val();       
+        var valor_not = $('#hiddennotadinv').val();
+        if (descp == '' || contenedor == '' || cantidad == '' || tipo_producto == '') {
+            swal(
+                'Validación',
+                'Debe capturar los datos obligatorios.',
+            )
+        }else{
+            var controlid = $('#hiddenidcontrol').val();
+            control = controlid.split('_');
+            if (control == '') {
+                var control_id = 1;
+            }else{
+               var control_id =  Math.max.apply(null, control) + 1;
+            }
+            var html = '<li id="elementoLista_'+control_id+'">'+descp+' - '+contenedor+' - '+cantidad+' - '+tipo_producto+' - '+notas_adicionales_inv+' <input type="checkbox" value="'+control_id+'" class="'+tipo+'"/></li>';
+            if (control == '') {
+                $('#content_list_control_inv').html('<strong>Lista de control de inventario</strong> <input type="button" class="quitarlista btn btn-danger btn-sm" data-lista="'+ulIdTipo+'" data-afectado="'+hiddenIdTipo+'" data-tipo="'+tipo+'" value="Quitar de la lista" /> <label for="seleccionartodo"><input type="checkbox" class="seleccionartodo" id="seleccionartodo" data-tipo="'+tipo+'" data-clave=""/>Seleccionar todo</label>');
+                $('#hiddenidcontrol').val(control_id);
+                $('#list_control_inv').append(html);
+                if (notas_adicionales_inv == ''){
+                    notas_adicionales_inv = 0;
+                }
+                $('#hiddenDescripcion').val(descp);
+                $('#hiddenContenedor').val(contenedor);
+                $('#hiddenCantidad').val(cantidad);
+                $('#hiddentproducto').val(tipo_producto);
+                $('#hiddennotadinv').val(notas_adicionales_inv);
+                $('#descripcion').val('');
+                $('#contenedor').val('');
+                $('#cantidad').val('');
+                $('#tproducto').val('');
+                $('#notasadinv').val('');
+            }else{
+                $('#hiddenidcontrol').val(controlid+'_'+control_id);
+                $('#list_control_inv').append(html);
+                if (notas_adicionales_inv == ''){
+                    notas_adicionales_inv = 0;
+                }
+                $('#hiddenDescripcion').val(valor_desc+'_'+descp);
+                $('#hiddenContenedor').val(valor_cont+'_'+contenedor);
+                $('#hiddenCantidad').val(valor_cant+'_'+cantidad);
+                $('#hiddentproducto').val(valor_tprod+'_'+tipo_producto);
+                $('#hiddennotadinv').val(valor_not+'_'+notas_adicionales_inv);
+                $('#descripcion').val('');
+                $('#contenedor').val('');
+                $('#cantidad').val('');
+                $('#tproducto').val('');
+                $('#notasadinv').val('');
+            }
+        }
+
+    }
     return;
 });
 function compararRepetidos(actuales, valorABuscar) {
     var valoresActuales = actuales.split('_');
     var valorABuscarAct = valorABuscar.split('_');
-
     if(Array.isArray(valoresActuales) == true) {
         if(valoresActuales.includes(valorABuscarAct[0]) == 1) {
             return false;
@@ -429,8 +516,136 @@ function compararRepetidos(actuales, valorABuscar) {
             return false;
         }
     }
-
     return true;
+}
+$(document).on('click', '.quitarlista', function(){
+    var classCheckstipo = $(this).data('tipo');
+    console.log(classCheckstipo);
+    if (classCheckstipo == 'inventario'){
+        var idDelAfectado = $(this).data('afectado');
+        var valorChecks = $('.'+classCheckstipo+':checked');
+        var valorAfectado = $(idDelAfectado).val();
+        var valorAfectadoArray = valorAfectado.split('_');
+        var resultAfectado = '';
+        if(valorChecks.length > 0) {
+            valorChecks.each(function() {
+                resultAfectado = quitarElementosInventarios(valorAfectadoArray, $(this).val());
+                $(idDelAfectado).val(resultAfectado);
+            });          
+        } else {
+            swal(
+                'Remover de la lista',
+                'Debe seleccionar un elemento de la lista para remover.',
+                'warning'
+            )
+        }
+    }else{
+        var idDelAfectado = $(this).data('afectado');
+        var valorChecks = $('.'+classCheckstipo+':checked');
+        var valorAfectado = $(idDelAfectado).val();
+        var valorAfectadoArray = valorAfectado.split('_');
+        var resultAfectado = '';
+        if(valorChecks.length > 0) {
+            valorChecks.each(function() {
+                resultAfectado = quitarElementos(valorAfectadoArray, $(this).val());
+                $(idDelAfectado).val(resultAfectado);
+            });          
+        } else {
+            swal(
+                'Remover de la lista',
+                'Debe seleccionar un elemento de la lista para remover.',
+                'warning'
+            )
+        }
+    }
+});
+function quitarElementos (arr, item) {
+    var notas = $('#hiddenNotasAd').val();
+    notas = notas.split('_');
+    var i = arr.indexOf( item );
+    notas.splice(i, 1);
+    quitarNotas(notas);
+    var result = '';
+    $('#elementoLista_'+item).remove();
+    arr.splice(i, 1);
+    var count = 1;
+    arr.forEach(function(valor, index) {
+        if(count == arr.length) {
+            result += valor;
+        } else {
+            result += valor+'_';
+            count = count+1;
+        }
+    });
+    return result;
+}
+function quitarNotas(arr){
+    var result = '';
+    var count = 1;
+    arr.forEach(function(valor, index) {
+        if(count == arr.length) {
+            result += valor;
+        } else {
+            result += valor+'_';
+            count = count+1;
+        }
+    });
+    $('#hiddenNotasAd').val(result);
+}
+function quitarElementosInventarios (arr, item) {
+    var i = arr.indexOf( item );
+
+    var descripcion = $('#hiddenDescripcion').val();
+    var contenedor = $('#hiddenContenedor').val();
+    var cantidad = $('#hiddenCantidad').val();
+    var tproducto = $('#hiddentproducto').val();
+    var notas = $('#hiddennotadinv').val();
+    descripcion = descripcion.split('_');
+    descripcion.splice(i, 1);
+    quitarComplementos(descripcion, '#hiddenDescripcion');
+
+    contenedor = contenedor.split('_');
+    contenedor.splice(i, 1);
+    quitarComplementos(contenedor, '#hiddenContenedor');
+
+    cantidad = cantidad.split('_');
+    cantidad.splice(i, 1);
+    quitarComplementos(cantidad, '#hiddenCantidad');
+
+    tproducto = tproducto.split('_');
+    tproducto.splice(i, 1);
+    quitarComplementos(tproducto, '#hiddentproducto');
+
+    notas = notas.split('_');
+    notas.splice(i, 1);
+    quitarComplementos(notas, '#hiddennotadinv');
+
+    var result = '';
+    $('#elementoLista_'+item).remove();
+    arr.splice(i, 1);
+    var count = 1;
+    arr.forEach(function(valor, index) {
+        if(count == arr.length) {
+            result += valor;
+        } else {
+            result += valor+'_';
+            count = count+1;
+        }
+    });
+    return result;
+}
+function quitarComplementos(arr, idinp){
+    var result = '';
+    var count = 1;
+    arr.forEach(function(valor, index) {
+        if(count == arr.length) {
+            result += valor;
+        } else {
+            result += valor+'_';
+            count = count+1;
+        }
+    });
+    $(idinp).val(result);
 }
 </script>
 @endpush

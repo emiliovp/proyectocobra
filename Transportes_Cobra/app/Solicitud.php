@@ -14,17 +14,17 @@ class Solicitud extends Model
      */
     protected $fillable = [
         'id', 
-        'nombre', 
-        'rfc ',
-        'telefono',
-        'extension',
-        'dirección',
-        'responsable',
+        'fechaHoraProgramada', 
+        'tipoMercancia ',
+        'lugarSalida',
+        'destino',
+        'tipo_movimiento',
+        'rel_cliente_bodega_id',
         'estatus',
         'created_at',
         'updated_at'
     ];
-    protected $table = "clientes";
+    protected $table = "solicitud";
     protected $hidden = [];
     protected $primaryKey = 'id';
 
@@ -33,5 +33,13 @@ class Solicitud extends Model
         ->get()
         ->toArray();
         return $sql;
+    }
+    public function setsolicitud($data){
+        try{
+            $data = Solicitud::create($data);
+            return $data->id;
+        } catch (\Throwable $th){
+            return false;
+        }
     }
 }
