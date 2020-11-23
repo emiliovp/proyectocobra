@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-lg-12 text-right">
-                            <a class="btn btn-warning" style="color:#FFFFFF;" href="{{ route('home') }}">Regresar</a>
+                            <a class="btn btn-warning" style="color:#FFFFFF;" href="{{ url('/home/1') }}">Regresar</a>
                             <button class="btn btn-success" id="altaUsr">Alta de Usuario</button>
                         </div>
                     </div>

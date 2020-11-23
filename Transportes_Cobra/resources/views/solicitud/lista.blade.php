@@ -24,7 +24,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 table-responsive">
-                            <table class="table table-bordered" id="usuario-table">
+                            <table class="table table-bordered" id="solicitud-table">
                                 <thead>
                                     <tr>
                                         <th>Folio</th>
@@ -48,18 +48,18 @@
 <script>
 var buttonCommon = {
         exportOptions: {
-            columns: [0,1,2,3],
+            columns: [0,1,2,3,4,5],
             format: {
                 body: function (data, row, column, node) {
                     // if it is select
-                    if (column == 3) {
+                    if (column == 6) {
                         return $(data).find("option:selected").text()
                     } else return data
                 }
             },
         }
     };
-    var table = $('#usuario-table').DataTable({
+    var table = $('#solicitud-table').DataTable({
         language: {
             url: "{{ asset('json/Spanish.json') }}",
             buttons: {
@@ -72,28 +72,14 @@ var buttonCommon = {
         },
         processing: true,
         serverSide: true,
-        ajax: '{!! route("listusers") !!}',
+        ajax: '{!! route("listSolicitud") !!}',
         columns: [
-            {data: 'id_usr', name: 'id_usr'}, 
-            {data: 'nombre_completo', name: 'nombre_completo'}, 
-            {data: 'username',  name: 'username'},
-            {data: 'nperfil',  name: 'nperfil'},
-            {data: 'narea',  name: 'narea'},
-            {
-                render: function (data,type,row){
-                    var html = '';
-                    html = '<div class="row">'+
-                                '<div class="col-md-6">'+
-                                '<a href="{{url("/usuarios/editar")}}/'+row.id_usr+'" class="btn btn-primary btn-block" id="editarlink" name="editarusr" data-id="'+row.id_usr+'">Editar</a>'+
-                                '</div>'+
-                                '<div class="col-md-6">'+
-                                    '<button class="btn btn-danger btn-block btn-baja" id="bajausr" name="bajausr" data-idusr="'+row.id_usr+'">Baja</button>'+
-                                '</div>'+
-                           '</div>';
-
-                    return html;
-                }
-            },
+            {data: 'folio', name: 'folio'}, 
+            {data: 'cliente', name: 'cliente'}, 
+            {data: 'fechaHoraProgramada',  name: 'fechaHoraProgramada'},
+            {data: 'fecha_inicio',  name: 'fecha_inicio'},
+            {data: 'fecha_termino',  name: 'fecha_termino'},
+            {data: 'estatus', name: 'estatus'},
         ],
         dom: 'Blfrtip',
         lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todo"]],

@@ -61,7 +61,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-5">
-                            <label for="modulop">Modulos padre</label>
+                            <label for="modulop">Menú</label>
                             <select class="form-control campo-requerido" id="modulop" name="modulop" data-padre="padre">
                                 <option value="">Seleccione...</option>
                                 @foreach($modulo as $val)
@@ -70,7 +70,7 @@
                             </select>
                         </div>
                         <div class="col-md-5">
-                            <label for="moduloh">Modulos hijo</label>
+                            <label for="moduloh">Submenu</label>
                             <select multiple class="form-control" name="moduloh" id="moduloh" data-hijo="hijo">
                                 <option value="">Seleccione...</option>
                             </select>

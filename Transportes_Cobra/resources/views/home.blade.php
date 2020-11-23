@@ -12,7 +12,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label>Almacenadora logistica internacional cobra</label>
+                                    <label><h5 class="card-title"><strong>Almacenadora logistica internacional cobra</strong></h5></label>
                                 </div>
                             </div>
                             <div class="row">
@@ -59,10 +59,6 @@
                                     </svg>
                                     </a>
                                 @endforeach
-                                <!--<a href="#" class="list-group-item list-group-item-action">Morbi leo risus</a>
-                                <a href="#" class="list-group-item list-group-item-action">Porta ac consectetur ac</a>
-                                <a href="#" class="list-group-item list-group-item-action">Vestibulum at eros</a>-->
-
                             </ul>
                         </div>
                     </div>

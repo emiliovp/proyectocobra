@@ -62,11 +62,17 @@ Route::group(['prefix' => 'catalogos'], function(){
     Route::post('/updateoptcat', 'OpcionesCatalogosController@updateoptcat')->name('updateoptcat');
     Route::put('/eliminacionopciones', 'OpcionesCatalogosController@deleteoptcat')->name('eliminarOptCatalogos');    
 });
+/**Solicitudes */
 Route::group(['prefix' => 'solicitud'], function(){
     Route::get('/lista','SolcitudController@index')->name('catalogos'); // ->middleware('doublesession');
+    Route::get('/anyData',  'SolcitudController@anyData')->name('listSolicitud');
     Route::get('/alta','SolcitudController@nuevaSolicitud')->name('nuevasolicitud');
     Route::get('/autocomplete','SolcitudController@autocomplete')->name('autocomplete');
     Route::get('/getbodega','SolcitudController@getbodegas')->name('getbodega');
     Route::get('/opcion',  'SolcitudController@getopt')->name('getopt');
     Route::post('/storedsolicitud', 'SolcitudController@stored')->name('storedsolicitud');
 });
+/**Servicios */
+/*Route::group(['prefix' => 'servicios'], function(){
+
+});*/
