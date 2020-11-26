@@ -73,6 +73,8 @@ Route::group(['prefix' => 'solicitud'], function(){
     Route::post('/storedsolicitud', 'SolcitudController@stored')->name('storedsolicitud');
 });
 /**Servicios */
-/*Route::group(['prefix' => 'servicios'], function(){
-
-});*/
+Route::group(['prefix' => 'servicio'], function(){
+    Route::get('/lista','servicioController@index')->name('servicios');
+    Route::get('/anyData',  'servicioController@anyData')->name('listServicio');
+    Route::get('/atender/{id}',  'servicioController@atendersol')->name('atendersol');
+});

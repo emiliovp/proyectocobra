@@ -106,4 +106,17 @@ class CatOpciones extends Model
         }
         return false;
     }
+    public function getServiciosByIdOp($id){
+        return CatOpciones::select('b.nombre as nom_servicio', 'b.id as idservicio','proveedor.id AS idproveedor', 'proveedor.nombre AS proveedor')
+        ->join('rel_proveedor_cat_opciones', 'rel_proveedor_cat_opciones.cat_opciones_id', '=', 'cat_opciones.id')
+        ->join('proveedor', 'proveedor.id', '=', 'rel_proveedor_cat_opciones.proveedor_id')
+        ->join('cat_opciones as b', 'b.id', '=', 'cat_opciones.cat_opciones_id')
+        ->whereIn('rel_proveedor_cat_opciones.cat_opciones_id', $id)
+        ->groupBy('idproveedor')
+        ->groupBy('proveedor')
+        ->groupBy('nom_servicio')
+        ->groupBy('idservicio')
+        ->get()
+        ->toArray();
+    }
 }
