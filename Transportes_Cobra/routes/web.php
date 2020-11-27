@@ -77,4 +77,5 @@ Route::group(['prefix' => 'servicio'], function(){
     Route::get('/lista','servicioController@index')->name('servicios');
     Route::get('/anyData',  'servicioController@anyData')->name('listServicio');
     Route::get('/atender/{id}',  'servicioController@atendersol')->name('atendersol');
+    Route::post('/stored', 'servicioController@storedProveedores')->name('storedProveedor');
 });

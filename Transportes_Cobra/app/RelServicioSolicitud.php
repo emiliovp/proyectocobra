@@ -41,7 +41,6 @@ class RelServicioSolicitud extends Model
     }
     public function getServiciosById($id){
         return RelServicioSolicitud::select('servicios_solicitud.id AS control_servicio',
-        'servicios_solicitud.id AS control_servicio',
         'servicios_solicitud.solicitud_id AS folio',
         'servicios_solicitud.cat_opciones_id',
         'b.id as idservicio',

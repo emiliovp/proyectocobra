@@ -21,6 +21,7 @@ class Solicitud extends Model
         'tipo_movimiento',
         'rel_cliente_bodega_id',
         'estatus',
+        'sectorista_id',
         'created_at',
         'updated_at'
     ];
@@ -85,5 +86,16 @@ class Solicitud extends Model
         ->where('solicitud.id', '=', $id)
         ->get()
         ->toArray();
+    }
+    public function updateSectStatus($id, $estatus, $sectorista){
+        try {
+            $sol = Solicitud::find($id);
+            $sol->estatus = $estatus;
+            $sol->sectorista_id = $sectorista;
+            $sol->save();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        } 
     }
 }

@@ -55,7 +55,7 @@ class UserController extends Controller
             'correo' => 'required',
         ]);
         $nombre = ($request->post('nombrep') !='') ? $request->post('nombrep') : NULL;
-        $apaterno = ($request->post('nombrep') !='') ? $request->post('nombrep') : NULL;
+        $apaterno = ($request->post('apaterno') !='') ? $request->post('apaterno') : NULL;
         $amaterno = ($request->post('amaterno') !='') ? $request->post('amaterno') : NULL; 
         $usr = ($request->post('usuario') !='') ? $request->post('usuario') : NULL;
         $pass = ($request->post('password1') !='') ? $request->post('password1') : NULL;
@@ -74,7 +74,7 @@ class UserController extends Controller
         $datausr['aPaterno'] = substr($apaterno,0,128);
         $datausr['aMaterno'] = substr($amaterno,0,128);
         $datausr['username'] = substr($usr,0,128);
-        $datausr['password'] =  Hash::make($pass);
+        $datausr['password'] =  Crypt::encryptString($pass);
         $datausr['correo'] = substr($correo,0,128);
         $datausr['telefono'] = substr($tel,0,15);
         $datausr['ext'] = substr($ext,0,15);

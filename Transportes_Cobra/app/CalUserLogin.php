@@ -204,4 +204,22 @@ class CalUserLogin extends Model
             return false;
         }
     }
+    public function getUserByPerfil($perfil){
+        return CalUserLogin::select([ 
+            DB::raw('CONCAT(usuario.nombre," ", usuario.aPaterno," ", usuario.aMaterno) as nombre_usuario'), 
+            'usuario.id AS idsectorista',
+            'usuario.username', 
+            'usuario.correo', 
+            'usuario.telefono', 
+            'usuario.ext', 
+            'perfil.nombre AS perfil',
+            'perfil.id AS idperfil',
+            'area.nombre AS area'
+            ])
+            ->join('perfil', 'perfil.id', '=', 'usuario.perfil_id')
+            ->join('area', 'area.id', '=', 'perfil.area_id')
+            ->whereRaw("perfil.nombre LIKE '".$perfil."%'")
+            ->get()
+            ->toArray();
+    }
 }
