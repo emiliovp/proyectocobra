@@ -50,6 +50,7 @@ class RelServicioSolicitud extends Model
         ->join('cat_opciones', 'cat_opciones.id', '=', 'servicios_solicitud.cat_opciones_id')
         ->join('cat_opciones as b', 'b.id', '=', 'cat_opciones.cat_opciones_id')
         ->where('servicios_solicitud.solicitud_id', '=', $id)
+        ->where('b.nombre', '<>', 'CUSTODIA')
         ->get()
         ->toArray();
     }

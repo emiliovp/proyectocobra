@@ -27,15 +27,15 @@ class RelServiciosSolicitudProveedor extends Model
     protected $primaryKey = 'id';
 
     public function setRelProvServicioSol($idrelsolser,$proveedor,$descripcion){
-        //try {
+        try {
             $relsersolprov = new RelServiciosSolicitudProveedor;
             $relsersolprov->servicios_solicitud_id = $idrelsolser;
             $relsersolprov->proveedor_id = $proveedor;
             $relsersolprov->descripcion = $descripcion;
             $relsersolprov->save();
             return true;
-        /*} catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             return false;
-        }*/
+        }
     }
 }
