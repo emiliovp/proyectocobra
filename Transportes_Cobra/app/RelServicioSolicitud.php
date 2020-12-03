@@ -54,5 +54,21 @@ class RelServicioSolicitud extends Model
         ->get()
         ->toArray();
     }
+    public function getServiciosCustodiaById($id){
+        return RelServicioSolicitud::select('servicios_solicitud.id AS control_servicio',
+        'servicios_solicitud.solicitud_id AS folio',
+        'servicios_solicitud.cat_opciones_id',
+        'b.id as idservicio',
+        'b.nombre as servicio',
+        'cat_opciones.nombre as tipo_servicio',
+        DB::raw('CONCAT(b.nombre," ",cat_opciones.nombre) AS servicios_solicitud')
+        )
+        ->join('cat_opciones', 'cat_opciones.id', '=', 'servicios_solicitud.cat_opciones_id')
+        ->join('cat_opciones as b', 'b.id', '=', 'cat_opciones.cat_opciones_id')
+        ->where('servicios_solicitud.solicitud_id', '=', $id)
+        ->where('b.nombre', '=', 'CUSTODIA')
+        ->get()
+        ->toArray();
+    }
     
 }

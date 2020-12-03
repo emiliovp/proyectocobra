@@ -232,7 +232,7 @@
             </div>
             <div class="form-group row" style="margin-top:10px;">
                 <div class="col-md-6">
-                    <a href="{{ route('catalogos') }}" class="btn btn-warning btn-block" style="color:#FFFFFF;">{{ __('Regresar') }}</a>
+                    <a href="{{ route('solicitud') }}" class="btn btn-warning btn-block" style="color:#FFFFFF;">{{ __('Regresar') }}</a>
                 </div>
                 <div class="col-md-6">
                     <input type="button" value="Guardar FUS" id="enviar" class="form-control btn btn-primary" />

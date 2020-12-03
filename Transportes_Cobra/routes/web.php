@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/home/{id}', 'HomeController@index')->name('hijo');
 
 Route::group(['prefix' => 'usuarios'], function(){
-    Route::get('/lista','UserController@index')->name('ListaUsuarios'); // ->middleware('doublesession');
+    Route::get('/lista','UserController@index')->name('ListaUsuarios')->middleware('auth');
     Route::get('/anyData',  'UserController@anyData')->name('listusers');
     Route::get('/nuevo',  'UserController@nuevo')->name('nuevousuario');
     Route::post('/stored',  'UserController@stored')->name('storedusuario');
@@ -31,7 +31,7 @@ Route::group(['prefix' => 'usuarios'], function(){
     Route::post('/baja',  'UserController@baja_usr')->name('bajausr');
 });
 Route::group(['prefix' => 'perfiles'], function(){
-    Route::get('/lista','PerfilController@index')->name('PerfilesUsuarios'); // ->middleware('doublesession');
+    Route::get('/lista','PerfilController@index')->name('PerfilesUsuarios')->middleware('auth');
     Route::get('/anyData', 'PerfilController@anyData')->name('listperfiles');
     Route::get('/nuevo',  'PerfilController@sotredperfil')->name('nuevoperfil');
     Route::get('/mhijo',  'PerfilController@modhijo')->name('mohijo');
@@ -39,7 +39,7 @@ Route::group(['prefix' => 'perfiles'], function(){
     Route::post('/baja',  'PerfilController@bajaPerfil')->name('bajaperfil');
 });
 Route::group(['prefix' => 'areas'], function(){
-    Route::get('/lista','AreaController@index')->name('areas'); // ->middleware('doublesession');
+    Route::get('/lista','AreaController@index')->name('areas')->middleware('auth');
     Route::get('/anyData', 'AreaController@anyData')->name('listaareas');
     Route::post('/stored', 'AreaController@stored')->name('storedareas');
     Route::post('/editar',  'AreaController@updated')->name('editararea');
@@ -47,13 +47,13 @@ Route::group(['prefix' => 'areas'], function(){
 });
 Route::group(['prefix' => 'catalogos'], function(){
     /**Administración de catálogos */
-    Route::get('/lista','CatalogoController@index')->name('catalogos'); // ->middleware('doublesession');
+    Route::get('/lista','CatalogoController@index')->name('catalogos')->middleware('auth');
     Route::get('/anyData', 'CatalogoController@anyData')->name('listacata');
     Route::post('/stored', 'CatalogoController@stored')->name('storedcatalogo');   
     Route::post('/editar',  'CatalogoController@updated')->name('editacatalogo');
     Route::post('/baja',  'CatalogoController@baja_catalog')->name('bajacatalogo');
     //**Administración de opciones */
-    Route::get('/listaopciones/{id}', 'OpcionesCatalogosController@index')->name('listaopciones');
+    Route::get('/listaopciones/{id}', 'OpcionesCatalogosController@index')->name('listaopciones')->middleware('auth');
     Route::get('/dataIndexOptCat', 'OpcionesCatalogosController@dataIndexOptCat')->name('dataIndexOptCat');
     Route::get('/altaopt/{id}', 'OpcionesCatalogosController@altaOpcion')->name('altaopciones');
     Route::get('/opbycat',    'OpcionesCatalogosController@OptionByCatId')->name('opByCat');
@@ -64,7 +64,7 @@ Route::group(['prefix' => 'catalogos'], function(){
 });
 /**Solicitudes */
 Route::group(['prefix' => 'solicitud'], function(){
-    Route::get('/lista','SolcitudController@index')->name('catalogos'); // ->middleware('doublesession');
+    Route::get('/lista','SolcitudController@index')->name('solicitud')->middleware('auth');
     Route::get('/anyData',  'SolcitudController@anyData')->name('listSolicitud');
     Route::get('/alta','SolcitudController@nuevaSolicitud')->name('nuevasolicitud');
     Route::get('/autocomplete','SolcitudController@autocomplete')->name('autocomplete');
@@ -78,4 +78,11 @@ Route::group(['prefix' => 'servicio'], function(){
     Route::get('/anyData',  'servicioController@anyData')->name('listServicio');
     Route::get('/atender/{id}',  'servicioController@atendersol')->name('atendersol');
     Route::post('/stored', 'servicioController@storedProveedores')->name('storedProveedor');
+});
+/**Custodias */
+Route::group(['prefix' => 'custodia'], function(){
+    Route::get('/lista','CustodiaController@index')->name('custodias');
+    Route::get('/anyData',  'CustodiaController@anyData')->name('listCustodia');
+    Route::get('/atender/{id}',  'CustodiaController@atendercustodia')->name('atendercustodia');
+    Route::post('/stored', 'CustodiaController@storedCustodia')->name('storedcustodia');
 });

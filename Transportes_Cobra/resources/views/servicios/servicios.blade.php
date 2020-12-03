@@ -63,8 +63,8 @@
                             <input type="text" class="form-control lg-4 campo-requerido" id="destino" name="destino" value ="{{ $data['fecha_inicio'] }}" disabled>
                         </div>
                         <div class="col-md-4">
-                            <label for="salida">fecha de salida:</label>
-                            <input type="text" class="form-control lg-4 campo-requerido" id="destino" name="destino" value ="{{ $data['fecha_termino'] }}" disabled>
+                            <label for="salida">fecha de llegada:</label>
+                            <input type="text" class="form-control lg-4 campo-requerido" id="destino" name="destino" value ="" disabled>
                         </div> 
                     </div>
                     <div class="form-group row">
@@ -148,7 +148,7 @@
             </div>
             <div class="form-group row" style="margin-top:10px;">
                 <div class="col-md-6">
-                    <a href="{{ route('catalogos') }}" class="btn btn-warning btn-block" style="color:#FFFFFF;">{{ __('Regresar') }}</a>
+                    <a href="{{ route('servicios') }}" class="btn btn-warning btn-block" style="color:#FFFFFF;">{{ __('Regresar') }}</a>
                 </div>
                 <div class="col-md-6">
                     <input type="button" value="Guardar FUS" id="enviar" class="form-control btn btn-primary" />
