@@ -36,6 +36,8 @@ Route::group(['prefix' => 'perfiles'], function(){
     Route::get('/nuevo',  'PerfilController@sotredperfil')->name('nuevoperfil');
     Route::get('/mhijo',  'PerfilController@modhijo')->name('mohijo');
     Route::post('store', 'PerfilController@stored')->name('storedper');
+    Route::get('/editar/{id}',  'PerfilController@updperfil')->name('editperfil');
+    Route::post('/update',  'PerfilController@modificacionperfil')->name('updateperfil');
     Route::post('/baja',  'PerfilController@bajaPerfil')->name('bajaperfil');
 });
 Route::group(['prefix' => 'areas'], function(){

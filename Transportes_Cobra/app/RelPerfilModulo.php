@@ -35,4 +35,13 @@ class RelPerfilModulo extends Model
             return false;
         }
     }
+    public function updateModulos($id){
+        try {
+            // RelPerfilModulo::where('perfil_id', '=', $id)->whereNotIn('modulo_id',$modulos)->delete();
+            RelPerfilModulo::where('perfil_id', '=', $id)->delete();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 }

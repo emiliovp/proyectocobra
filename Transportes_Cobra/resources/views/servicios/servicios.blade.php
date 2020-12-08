@@ -251,8 +251,6 @@ $('.btn-add').click(function(){
 function compararRepetidos(actuales, valorABuscar) {
     var valoresActuales = actuales.split('_');
     var valorABuscarAct = valorABuscar.split('_');
-    console.log(valoresActuales);
-    console.log(valorABuscarAct);
     if(Array.isArray(valoresActuales) == true) {
         if(valoresActuales.includes(valorABuscarAct[0]) == 1) {
             return false;

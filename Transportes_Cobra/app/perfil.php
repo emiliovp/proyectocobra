@@ -58,4 +58,24 @@ class perfil extends Model
 
         return false;
     }
+    public function getPerfilById($idperfil){
+        return perfil::select(['perfil.id as idperfil','perfil.nombre as perfil', 'perfil.descripcion as descper','area.nombre as area', 'area.id as idarea'])
+        ->join('area', 'area.id', '=', 'perfil.area_id')
+        ->where('perfil.id','=',$idperfil)
+        ->get()
+        ->toArray();
+    }
+    public function updatePerfil($idperfil,$perfNombre,$perfDescripcion,$area_id){
+        date_default_timezone_set('America/Mexico_City');
+        $data = perfil::find($idperfil);
+        $data->nombre = $perfNombre;
+        $data->descripcion = $perfDescripcion;
+        $data->area_id = $area_id;
+        $data->updated_at = date('yy-m-d H:m:s');
+        if($data->save()) {
+            return true;
+        }
+
+        return false;
+    }
 }

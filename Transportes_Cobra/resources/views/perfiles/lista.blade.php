@@ -32,7 +32,7 @@
                                         <th>id</th>
                                         <th>Nombre</th>
                                         <th>Área</th>
-                                        <th>Eliminar</th>
+                                        <th>Acción</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -81,7 +81,10 @@ var buttonCommon = {
                 render: function (data,type,row){
                     var html = '';
                     html = '<div class="row">'+
-                            '<div class="col-md-12">'+
+                            '<div class="col-md-6">'+
+                                '<a href="{{url("/perfiles/editar")}}/'+row.perfil_id+'" class="btn btn-primary btn-block" id="editarlink" name="editarusr" data-id="'+row.perfil_id+'">Editar</a>'+
+                                '</div>'+
+                            '<div class="col-md-6">'+
                                 '<button class="btn btn-danger btn-block btn-baja" id="bajaper" name="bajaper" data-idperfil="'+row.perfil_id+'">Baja</button>'+
                             '</div>'+
                            '</div>';
