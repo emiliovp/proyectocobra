@@ -6,21 +6,19 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use App\LogMovimiento;
 use App\CalUserLogin;
 use App\perfil;
 use Session;
 
 class UserController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->ip_cliente = ipAddress();
+        $this->middleware('auth');
     }
 
     /**
@@ -30,7 +28,19 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('usuarios.lista');  //->with(['alat' => 0]);
+        $mov = new LogMovimiento;
+        $usr = new CalUserLogin;
+        $id = Auth::user()->usuario_id;
+        $data = $usr->getuserid($id);
+          $data = array(
+          'ip_address' => $this->ip_cliente, 
+          'descripcion' => 'El usuario '.$data[0]['username'].' visualizó lista de usuarios.',
+          'tipo' => 4,
+          'id_user' => $id
+          );
+          $bitacora = new LogMovimiento;
+          $bitacora->setMovimiento($data);
+        return view('usuarios.lista');
     }
     public function anyData()
     {
@@ -80,6 +90,17 @@ class UserController extends Controller
         $datausr['ext'] = substr($ext,0,15);
         $datausr['perfil_id'] = substr($perfil,0,15);
         if($idp = $a->setUsuario($datausr)){
+            $mov = new LogMovimiento;
+            $idusrlog = Auth::user()->usuario_id;
+            $datausrlog = $a->getuserid($idusrlog);
+            $datalog = array(
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$datausrlog[0]['username'].' dio de alta al usuario: '.$usr.' con el ID: '.$idp.'.',
+            'tipo' => 1,
+            'id_user' => $idusrlog
+            );
+            $bitacora = new LogMovimiento;
+            $bitacora->setMovimiento($datalog);
             Session::flash('success', 'La operación se ha realizado con exito');
             return redirect('usuarios/lista');
         }else{
@@ -132,6 +153,19 @@ class UserController extends Controller
         $datausr['perfil_id'] = $perfil;
 
         if($idp = $a->updusuario($idusr,$datausr)){
+
+            $mov = new LogMovimiento;
+            $idusrlog = Auth::user()->usuario_id;
+            $datausrlog = $a->getuserid($idusrlog);
+            $datalog = array(
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$datausrlog[0]['username'].' ha editado al usuario: '.$usr.' con el ID: '.$idusr.'.',
+            'tipo' => 3,
+            'id_user' => $idusrlog
+            );
+            $bitacora = new LogMovimiento;
+            $bitacora->setMovimiento($datalog);
+
             Session::flash('success', 'La operación se ha realizado con exito');
             return redirect('usuarios/lista');
         }else{
@@ -143,18 +177,17 @@ class UserController extends Controller
         $a = new CalUserLogin;
         $term = $request->post('id');
         if($a->baja_usr($term) === true) {
-            /*$msjDescription = 'Se ha puesto como '.$mov.' el área con id '.$request->post("id");
-            
-            $data = array(
-                'ip_address' => $this->ip_address_client, 
-                'description' => $msjDescription,
-                'tipo' => 'bloqueo',
-                'id_user' => $idEmployee
+            $mov = new LogMovimiento;
+            $idusrlog = Auth::user()->usuario_id;
+            $datausrlog = $a->getuserid($idusrlog);
+            $datalog = array(
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$datausrlog[0]['username'].' ha dado de baja un usuario con el ID: '.$term.'.',
+            'tipo' => 2,
+            'id_user' => $idusrlog
             );
-            
-            $bitacora = new CalLogBookMovements;
-            $bitacora->guardarBitacora($data);*/
-            
+            $bitacora = new LogMovimiento;
+            $bitacora->setMovimiento($datalog);
             return Response::json(true);
         }
         return Response::json(false);

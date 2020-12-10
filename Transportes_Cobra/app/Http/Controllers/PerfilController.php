@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Auth;
+use App\LogMovimiento;
+use App\CalUserLogin;
 use App\RelPerfilModulo;
 use App\perfil;
 use App\modulo;
@@ -19,7 +22,8 @@ class PerfilController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
+        $this->ip_cliente = ipAddress();
     }
 
     /**
@@ -29,6 +33,18 @@ class PerfilController extends Controller
      */
     public function index()
     {
+        $mov = new LogMovimiento;
+        $usr = new CalUserLogin;
+        $id = Auth::user()->usuario_id;
+        $data = $usr->getuserid($id);
+        $data = array(
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$data[0]['username'].' visualizó lista de perfiles.',
+            'tipo' => 4,
+            'id_user' => $id
+        );
+        $bitacora = new LogMovimiento;
+        $bitacora->setMovimiento($data);
         return view('perfiles.lista');
     }
     public function anyData()
@@ -77,6 +93,20 @@ class PerfilController extends Controller
         }
         $rel = new RelPerfilModulo;
         if($resRel = $rel->setRelModPer($idp, $idmodulos)){
+
+            $mov = new LogMovimiento;
+            $usr = new CalUserLogin;
+            $idusrlog = Auth::user()->usuario_id;
+            $datausrlog = $usr->getuserid($idusrlog);
+            $datalog = array(
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$datausrlog[0]['username'].' dio de alta el perfil: '.$nombre.'con el ID:'.$idp.'.',
+            'tipo' => 1,
+            'id_user' => $idusrlog
+            );
+            $bitacora = new LogMovimiento;
+            $bitacora->setMovimiento($datalog);
+
             Session::flash('success', 'La operación se ha realizado con exito');
             return redirect('perfiles/lista');
         }else{
@@ -88,17 +118,18 @@ class PerfilController extends Controller
         $a = new perfil;
         $term = $request->post('id');
         if($a->baja_perfil($term) === true) {
-            /*$msjDescription = 'Se ha puesto como '.$mov.' el área con id '.$request->post("id");
-            
-            $data = array(
-                'ip_address' => $this->ip_address_client, 
-                'description' => $msjDescription,
-                'tipo' => 'bloqueo',
-                'id_user' => $idEmployee
+            $mov = new LogMovimiento;
+            $usr = new CalUserLogin;
+            $idusrlog = Auth::user()->usuario_id;
+            $datausrlog = $usr->getuserid($idusrlog);
+            $datalog = array(
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$datausrlog[0]['username'].' ha dado de baja un perfil con el ID: '.$term.'.',
+            'tipo' => 2,
+            'id_user' => $idusrlog
             );
-            
-            $bitacora = new CalLogBookMovements;
-            $bitacora->guardarBitacora($data);*/
+            $bitacora = new LogMovimiento;
+            $bitacora->setMovimiento($datalog);
             
             return Response::json(true);
         }
@@ -147,6 +178,18 @@ class PerfilController extends Controller
         }
         $rel = new RelPerfilModulo;
         if($resRel = $rel->setRelModPer($id, $idmodulos)){
+            $mov = new LogMovimiento;
+                $usr = new CalUserLogin;
+                $idusrlog = Auth::user()->usuario_id;
+                $datausrlog = $usr->getuserid($idusrlog);
+                $datalog = array(
+                'ip_address' => $this->ip_cliente, 
+                'descripcion' => 'El usuario '.$datausrlog[0]['username'].' ha editado el perfil: '.$perfNombre.' con el ID: '.$id.'.',
+                'tipo' => 3,
+                'id_user' => $idusrlog
+                );
+                $bitacora = new LogMovimiento;
+                $bitacora->setMovimiento($datalog);
             Session::flash('success', 'La operación se ha realizado con exito');
             return redirect('perfiles/lista');
         }else {

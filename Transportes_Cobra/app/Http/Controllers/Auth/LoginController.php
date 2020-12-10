@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Crypt;
+use App\LogMovimiento;
 use App\CalUserLogin;
 use App\sessions;
 
@@ -84,20 +85,14 @@ class LoginController extends Controller
         if ($previous_session) {
             Session::getHandler()->destroy($previous_session);
         }        
-        //  dd($datos[0]);
         
-        $session = new CalUserLogin; // (object)array();
-        /*$session['nombre'] = $datos[0]['nombre_completo'];
-        $session['usuario'] = $datos[0]['username'];
-        $session['perfil'] = $datos[0]['id_perfil'];
-        $session['area'] = $datos[0]['id_area'];*/
+        $session = new CalUserLogin; 
         $session->nombre = $datos[0]['nombre_completo'];
         $session->usuario = $datos[0]['username'];
         $session->perfil = $datos[0]['id_perfil'];
         $session->area = $datos[0]['id_area'];
        
         $tabsession = new sessions;
-        // $session->ip_address = $this->ip_address_client;
         $tabsession->description = 'Usuario logueado';
         $tabsession->tipo = 1;
         $tabsession->usuario_id = $datos[0]['id_usr'];

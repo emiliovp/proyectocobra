@@ -290,7 +290,7 @@ $(document).on("click", "#baja", function(){
                 if(response == 1) {
                     table.ajax.reload();
                     swal(
-                        tittle,
+                        'Baja de área',
                         'La operación se ha realizado con éxito',
                         'success'
                     )

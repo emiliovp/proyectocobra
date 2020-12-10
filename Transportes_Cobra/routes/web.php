@@ -88,3 +88,7 @@ Route::group(['prefix' => 'custodia'], function(){
     Route::get('/atender/{id}',  'CustodiaController@atendercustodia')->name('atendercustodia');
     Route::post('/stored', 'CustodiaController@storedCustodia')->name('storedcustodia');
 });
+/**proveedores */
+Route::group(['prefix' => 'proveedores'], function(){
+    Route::get('/lista', 'ProveedoresController@index')->name('proveedores');
+});

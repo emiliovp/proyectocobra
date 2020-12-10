@@ -322,6 +322,7 @@ function compararRepetidos(actuales, valorABuscar, nombreactuales, nombreabuscar
 function mayus(e) {
     e.value = e.value.toUpperCase();
 }
+
 $(document).on('click', '.quitarlista', function(){
     var classCheckstipo = $(this).data('tipo');
     var idDelAfectado = $(this).data('afectado');

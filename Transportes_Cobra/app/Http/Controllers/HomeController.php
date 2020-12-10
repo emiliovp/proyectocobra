@@ -33,6 +33,8 @@ class HomeController extends Controller
         }else{
             $datos = $a->getInfUsr($idusr);
         }
+        $datos = ($datos == null) ? null : $datos ;
+        //dd($datos);
         return view('home')->with(['datos' => $datos]);
     }
     public function modhijo($id_mod = null)
