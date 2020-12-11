@@ -31,7 +31,7 @@
                                         <th>Cliente</th>
                                         <th>Fecha de programación</th>
                                         <th>Fecha y hora de inicio</th>
-                                        <th>fecha y hora de termino</th>
+                                        <th>Fecha y hora de termino</th>
                                         <th>Estatus</th>
                                     </tr>
                                 </thead>

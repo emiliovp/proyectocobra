@@ -21,6 +21,7 @@ class RelClienteBodega extends Model
     protected $table = "rel_cliente_bodega";
     protected $hidden = [];
     protected $primaryKey = 'id';
+    public $timestamps = false;
 
     public function getBodegaCliente($cliente, $bodega_id){
         $sql = RelClienteBodega::where('cliente_id','=', $cliente)

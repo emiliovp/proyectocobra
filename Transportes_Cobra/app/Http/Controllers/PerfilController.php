@@ -156,8 +156,8 @@ class PerfilController extends Controller
         $id = $request->post('perfilId');
         $nombre = ($request->post('nombrep') !='') ? $request->post('nombrep') : NULL;
         $perfNombre = substr($nombre,0,128);
-        $descripcion = ($request->post('nombrep') !='') ? $request->post('nombrep') : NULL;
-        $perfDescripcion = substr($nombre,0,256);
+        $descripcion = ($request->post('descripcion') !='') ? $request->post('descripcion') : NULL;
+        $perfDescripcion = substr($nombre,0,255);
         $area_id = $request->post('area');
         $modPad = $request->post('hiddenModuloPad');
         $idmodulos = explode("_",$modPad);
@@ -173,12 +173,11 @@ class PerfilController extends Controller
             Session::flash('excepcionerror', 'Error al realizar la operación, favor de volver a intentarlo');
             return redirect()->back()->withInput();
         }
-        if ($arrModHijo != NULL ) {
+        if ($arrModHijo[0] != NULL ) {
             $idmodulos = array_merge($idmodulos,$arrModHijo);
         }
         $rel = new RelPerfilModulo;
         if($resRel = $rel->setRelModPer($id, $idmodulos)){
-            $mov = new LogMovimiento;
                 $usr = new CalUserLogin;
                 $idusrlog = Auth::user()->usuario_id;
                 $datausrlog = $usr->getuserid($idusrlog);

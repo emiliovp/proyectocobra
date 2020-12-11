@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class RelPerfilModulo extends Model
+class RelProveedorServicio extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,31 +13,29 @@ class RelPerfilModulo extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 
-        'perfil_id', 
-        'modulo_id'
+        'id',  
+        'proveedor_id ',
+        'cat_opciones_id',
     ];
-    protected $table = "rel_perfil_modulo";
+    protected $table = "rel_proveedor_cat_opciones";
     protected $hidden = [];
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    public function setRelModPer($idp, $modulos){
+    public function setRelProvServicio($idprov, $idservicio){
         try {
-            foreach ($modulos as $key => $value) {
-                $relModPer = new RelPerfilModulo;
-                $relModPer->perfil_id = $idp;
-                $relModPer->modulo_id = $value;
-                $relModPer->save();
-            }
+            $servprov = new RelProveedorServicio;
+            $servprov->proveedor_id = $idprov;
+            $servprov->cat_opciones_id = $idservicio;
+            $servprov->save();
             return true;
         } catch (\Throwable $th) {
             return false;
         }
     }
-    public function updateModulos($id){
+    public function updRelProvServicio($id){
         try {
-            RelPerfilModulo::where('perfil_id', '=', $id)->delete();
+            RelProveedorServicio::where('proveedor_id', '=', $id)->delete();
             return true;
         } catch (\Throwable $th) {
             return false;

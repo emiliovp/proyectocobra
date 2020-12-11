@@ -1,7 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{route('storedper')}}" id="form-sol" accept-charset="UTF-8" enctype="multipart/form-data">
+<style>
+    .card-body {
+        padding: 0.5rem 1.25rem;
+    }
+    label.error {
+        font-size: 8pt;
+        color: red;
+    }
+    .remover_campo {
+        margin: auto;
+        position: relative;
+        border: 2px;
+    }
+    .divselectmultiple {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+<form method="POST" action="{{route('storedprov')}}" id="form-prov" accept-charset="UTF-8" enctype="multipart/form-data">
 @csrf
 <div class="container-fluid">
     <div id="success">
@@ -17,85 +35,52 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    Alta de perfil.
+                    Alta de proveedor.
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4">
-                            <label for="nombrep">Perfil:</label>
-                            <input tipe="text" class="form-control lg-4 campo-requerido{{ $errors->has('nombrep') ? ' is-invalid' : '' }}" value="{{ old('nombrep') }}" id="nombrep" name="nombrep">
-                            @if ($errors->has('nombrep'))
+                        <div class="col-md-6">
+                            <label for="nombreprov">Proveedor:</label>
+                            <input tipe="text" class="form-control lg-4 campo-requerido{{ $errors->has('nombreprov') ? ' is-invalid' : '' }}" value="{{ old('nombreprov') }}" id="nombreprov" name="nombreprov">
+                            @if ($errors->has('nombreprov'))
                             <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('nombrep')}}</strong>
+                                <strong>{{ $errors->first('nombreprov')}}</strong>
                             </span>   
                             @endif                     
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="descipcion">Descripci&oacute;n:</label>
                             <input tipe="text" class="form-control lg-4" id="descipcion" name="descipcion" value="{{ old('descipcion') }}">
                         </div>
-                        <div class="col-md-4">
-                            <label for="area">Área:</label>
-                            <select class="form-control campo-requerido" id="area" name="area" value="{{ old('area') }}">
-                                <option value="">Seleccione...</option>
-                                @foreach($area as $val)
-                                    @php
-                                        $selected = "";
-                                    @endphp
-                                    @if ($errors)
-                                        @if($val['id'] == old('area'))
-                                            @php
-                                                $selected = "selected";
-                                            @endphp
-                                        @endif
-                                    @endif
-                                <option {{ $selected }} value="{{ $val['id'] }}">{{ $val['nombre'] }}</option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('nombrep'))
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $errors->first('nombrep')}}</strong>
-                            </span>   
-                            @endif
-                        </div>    
                     </div>
                     <div class="row">
                         <div class="col-md-5">
-                            <label for="modulop">Menú</label>
-                            <select class="form-control campo-requerido" id="modulop" name="modulop" data-padre="padre">
+                            <label for="servicios">Servicios</label>
+                            <select class="form-control" id="servicios" name="servicios" data-padre="servicios">
                                 <option value="">Seleccione...</option>
-                                @foreach($modulo as $val)
+                                @foreach($servicios as $val)
                                     <option value="{{ $val['id'] }}">{{ $val['nombre'] }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-5">
-                            <label for="moduloh">Submenu</label>
-                            <select multiple class="form-control" name="moduloh" id="moduloh" data-hijo="hijo">
+                            <label for="tservicios">Tipo de servicios</label>
+                            <select multiple class="form-control" name="tservicios" id="tservicios" data-hijo="tservicios">
                                 <option value="">Seleccione...</option>
                             </select>
                         </div>
                         <div class="col-md-1">
                             <label>&nbsp;</label>
-                            <input type="hidden" name="hiddenModuloPad" id="hiddenModuloPad"/>
-                            <input type="hidden" name="hiddenModulo" id="hiddenModulo"/>
-                            <button id="addperfil" type="button" class="form-control btn btn-primary btn-add" disabled><i class="fas fa-plus"></i></button>
+                            <input type="hidden" class="campo-requerido" name="hiddenTipoServicios" id="hiddenTipoServicios"/>
+                            <button id="addservicios" type="button" class="form-control btn btn-primary btn-add" disabled><i class="fas fa-plus"></i></button>
                         </div>   
                     </div>
                     <div class="form-group row">
                         <div class="col-md-6">
-                            <div id="content_list_modulopad" class="col-md-12"></div>
+                            <div id="content_list_tiposervicio" class="col-md-12"></div>
 
                             <div class="col-md-12">
-                                <ul id="list_modulopad">
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="content_list_modulo" class="col-md-12"></div>
-
-                            <div class="col-md-12">
-                                <ul id="list_modulo">
+                                <ul id="list_tiposervicio">
                                 </ul>
                             </div>
                         </div>
@@ -105,7 +90,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12 text-right">
-                            <a href="{{ route('PerfilesUsuarios') }}" id="regresar" class="btn btn-warning">Regresar</a>
+                            <a href="{{ route('proveedores') }}" id="regresar" class="btn btn-warning">Regresar</a>
                             <button type="submit" class="btn btn-primary update" id="enviar" >Guardar</button>
                         </div>
                     </div>
@@ -140,117 +125,69 @@ $('#enviar').click(function() {
         confirmButtonText: 'De acuerdo'
     }).then((result) => {
         if (result.value) {
-            $('#form-sol').submit();
+            $('#form-prov').submit();
         }
     });
 });
-$('#form-sol').validate({
+$('#form-prov').validate({
     ignore: "",
     submitHandler: function(form) {
         mostrarLoading();
         setTimeout(form.submit(), 500);
     }
 });
-$(document).on('change','#modulop', function(){
+$(document).on('change','#servicios', function(){
     var padre = $(this).val();
-    $('#moduloh').empty();
-    $('#moduloh').append("<option value=''>Selecciona una opcion valida</option>");
+    $('#tservicios').empty();
+    $('#tservicios').append("<option value=''>Selecciona una opcion valida</option>");
     $.ajax({
-        url: "{{ route('mohijo') }}",
+        url: "{{ route('optser') }}",
         dataType: "JSON",
-        data:{padre: padre},
+        data:{servicio: padre},
         success: function(response) {
             $.each(response,function(index,value){
-                $('#moduloh').append("<option value='"+value.id+"'>"+value.nombre+"</option>");
+                $('#tservicios').append("<option value='"+value.id+"'>"+value.nombre+"</option>");
             })
-            $('#addperfil').removeAttr("disabled");//habilita boton
+            $('#addservicios').removeAttr("disabled");//habilita boton
         }
     });
 });
 $('.btn-add').click(function(){    
-    // var titleList = 'Lista de módulos agregados';
-    var mov = $('#modulop').attr("data-padre");
-    var mov2 = $('#moduloh').attr("data-hijo");
-    if (mov == 'padre') {
-        var tipo = 'modulo_padre';
-        var hiddenIdTipo = '#hiddenModuloPad';
-        var selectSelectedIdTipo = '#modulop option:selected';
-        var divUlIdTipo = '#content_list_modulopad';
-        var ulIdTipo = '#list_modulopad';
-        var titleList = 'Lista de módulos padre agregados';
-        // $.each($(selectSelectedIdTipo), function() {
-        if($('#modulop').val() != '') {
+        var tipo = 'servicio';
+        var hiddenIdTipo = '#hiddenTipoServicios';
+        var selectSelectedIdTipo = '#tservicios option:selected';
+        var divUlIdTipo = '#content_list_tiposervicio';
+        var ulIdTipo = '#list_tiposervicio';
+        var titleList = 'Lista de servicios agregados';
+        var servicio = '#servicios option:selected';
+        if($('#tservicios').val() != '') {
             var valor = $(hiddenIdTipo).val();
-            // var valSelect = $(this).val();
-            var valSelect = $('#modulop').val();
-            var pad = $('#modulop option:selected').text();
-            var html = '<li id="elementoLista_'+valSelect+'">'+pad+' <input type="checkbox" value="'+valSelect+'" class="checkremove_'+tipo+'"/></li>';
+            var valSelect = $(selectSelectedIdTipo).val();
+            var html = '<li id="elementoLista_'+valSelect+'">'+$(servicio).text()+' / '+$(selectSelectedIdTipo).text()+' <input type="checkbox" value="'+valSelect+'" class="checkremove_'+tipo+'"/></li>';
             valSelect = valSelect.split('_');
             if(valor != '') {
-                if(compararRepetidosAutorizaciones(valor, valSelect[0]) === true) {
+                if(compararRepetidos(valor, valSelect[0]) === true) {
                     $(hiddenIdTipo).val(valor+'_'+valSelect[0]);
                     $(ulIdTipo).append(html);
                 } else {
-                    /*swal(
+                    swal(
                         'Validación',
                         'El '+tipo+' ya se ha agregado, vuelva a intentarlo con otro.',
                         'warning'
-                    )*/
+                    )
                 }
             }else {
                 $(divUlIdTipo).html('<strong>'+titleList+'</strong> <input type="button" class="quitarlista btn btn-danger btn-sm" data-lista="'+ulIdTipo+'" data-afectado="'+hiddenIdTipo+'" data-tipo="checkremove_'+tipo+'" value="Quitar de la lista" /> <label for="seleccionartodo"><input type="checkbox" class="seleccionartodo" id="seleccionartodo" data-tipo="'+tipo+'" data-clave=""/>Seleccionar todo</label>');
                 $(hiddenIdTipo).val(valSelect[0]);
                 $(ulIdTipo).append(html);
             }
-        } else {
+        }else{
             swal(
                 'Validación',
                 'Debe seleccionar un '+tipo+' antes de intentar agregarlo.',
                 'warning'
             )
         }
-        // });
-    }
-    if(mov2 == 'hijo'){
-            var tipo = 'modulo';
-            var hiddenIdTipo = '#hiddenModulo';
-            var selectSelectedIdTipo = '#moduloh option:selected';
-            var divUlIdTipo = '#content_list_modulo';
-            var ulIdTipo = '#list_modulo';
-            var titleList = 'Lista de módulos agregados';
-            $.each($(selectSelectedIdTipo), function() {
-                if($('#moduloh').val() != '') {
-                    var valor = $(hiddenIdTipo).val();
-                    var valSelect = $(this).val();
-                    var valSelectpadre = $('#modulop').val();
-                    var pad = $('#modulop option:selected').text();
-                    var html = '<li id="elementoLista_'+valSelect+'">'+pad+' / '+$(this).text()+' <input type="checkbox" value="'+valSelect+'" class="checkremove_'+tipo+'"/></li>';
-                    valSelect = valSelect.split('_');
-                    if(valor != '') {
-                        if(compararRepetidosAutorizaciones(valor, valSelect[0]) === true) {
-                            $(hiddenIdTipo).val(valor+'_'+valSelect[0]);
-                            $(ulIdTipo).append(html);
-                        } else {
-                            swal(
-                                'Validación',
-                                'El '+tipo+' ya se ha agregado, vuelva a intentarlo con otro.',
-                                'warning'
-                            )
-                        }
-                    } else {
-                        $(divUlIdTipo).html('<strong>'+titleList+'</strong> <input type="button" class="quitarlista btn btn-danger btn-sm" data-lista="'+ulIdTipo+'" data-afectado="'+hiddenIdTipo+'" data-tipo="checkremove_'+tipo+'" value="Quitar de la lista" /> <label for="seleccionartodo"><input type="checkbox" class="seleccionartodo" id="seleccionartodo" data-tipo="'+tipo+'" data-clave=""/>Seleccionar todo</label>');
-                        $(hiddenIdTipo).val(valSelect[0]);
-                        $(ulIdTipo).append(html);
-                    }
-                } else {
-                    swal(
-                        'Validación',
-                        'Debe seleccionar un '+tipo+' antes de intentar agregarlo.',
-                        'warning'
-                    )
-                }
-            });
-    }
     return;
 });
 $(document).on('click', '.seleccionartodo', function(){
@@ -262,7 +199,7 @@ $(document).on('click', '.seleccionartodo', function(){
         $('.checkremove_'+tipo).prop('checked', false);
     }
 });
-function compararRepetidosAutorizaciones(actuales, valorABuscar) {
+function compararRepetidos(actuales, valorABuscar) {
     var valoresActuales = actuales.split('_');
     var valorABuscarAct = valorABuscar.split('_');
 

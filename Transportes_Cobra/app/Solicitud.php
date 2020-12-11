@@ -36,12 +36,12 @@ class Solicitud extends Model
         return $sql;
     }
     public function setsolicitud($data){
-        try{
+        //try{
             $data = Solicitud::create($data);
             return $data->id;
-        } catch (\Throwable $th){
+        /*} catch (\Throwable $th){
             return false;
-        }
+        }*/
     }
     public function getSolicitudInfo(){
         return Solicitud::select(['solicitud.id AS folio','solicitud.fechaHoraProgramada', 

@@ -15,13 +15,13 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    Lista de perfiles.
+                    Lista de proveedores.
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-lg-12 text-right">
-                            <a class="btn btn-warning" style="color:#FFFFFF;" href="{{ url('/home/1') }}">Regresar</a>
-                            <button class="btn btn-success" id="altaPerf">Alta de perfil</button>
+                            <a class="btn btn-warning" style="color:#FFFFFF;" href="{{ url('/home') }}">Regresar</a>
+                            <button class="btn btn-success" id="altaProv">Alta de proveedor</button>
                         </div>
                     </div>
                     <div class="row">
@@ -31,7 +31,7 @@
                                     <tr>
                                         <th>id</th>
                                         <th>Nombre</th>
-                                        <th>Área</th>
+                                        <!--<th>Área</th>-->
                                         <th>Acción</th>
                                     </tr>
                                 </thead>
@@ -48,11 +48,11 @@
 <script>
 var buttonCommon = {
         exportOptions: {
-            columns: [0,1,2],
+            columns: [0,1],
             format: {
                 body: function (data, row, column, node) {
                     // if it is select
-                    if (column == 3) {
+                    if (column == 2) {
                         return $(data).find("option:selected").text()
                     } else return data
                 }
@@ -72,20 +72,20 @@ var buttonCommon = {
         },
         processing: true,
         serverSide: true,
-        ajax: '{!! route("listperfiles") !!}',
+        ajax: '{!! route("listproveedor") !!}',
         columns: [
-            {data: 'perfil_id', name: 'perfil_id'}, 
-            {data: 'nombre_perfil',  name: 'nombre_perfil'},
-            {data: 'area',  name: 'area'},
+            {data: 'id', name: 'id'}, 
+            {data: 'nombre',  name: 'nombre'},
+            //{data: 'area',  name: 'area'},
             {
                 render: function (data,type,row){
                     var html = '';
                     html = '<div class="row">'+
                             '<div class="col-md-6">'+
-                                '<a href="{{url("/perfiles/editar")}}/'+row.perfil_id+'" class="btn btn-primary btn-block" id="editarlink" name="editarusr" data-id="'+row.perfil_id+'">Editar</a>'+
+                                '<a href="{{url("/proveedores/editar")}}/'+row.id+'" class="btn btn-primary btn-block" id="editarlink" name="editarprov" data-id="'+row.id+'">Editar</a>'+
                                 '</div>'+
                             '<div class="col-md-6">'+
-                                '<button class="btn btn-danger btn-block btn-baja" id="bajaper" name="bajaper" data-idperfil="'+row.perfil_id+'">Baja</button>'+
+                                '<button class="btn btn-danger btn-block btn-baja" id="bajaprov" name="bajaprov" data-idproveedor="'+row.id+'">Baja</button>'+
                             '</div>'+
                            '</div>';
 
@@ -110,14 +110,14 @@ var buttonCommon = {
             })
         ]
     });
-$('#altaPerf').click(function()
+$('#altaProv').click(function()
 {
-    var url = '{!!route('nuevoperfil')!!}';
+    var url = '{!!route('nuevoproveedor')!!}';
     $( location).attr("href",url);
 });
-$(document).on("click", "#bajaper", function(){
+$(document).on("click", "#bajaprov", function(){
     swal({
-        title: '¿Esta seguro de eliminar el área?',
+        title: '¿Esta seguro de eliminar el proveedor?',
         text: 'Esta operación no se podra revertir',
         type: 'warning',
         showCancelButton: true,
@@ -131,11 +131,11 @@ $(document).on("click", "#bajaper", function(){
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
             });
-        var id = $(this).attr("data-idperfil");
+        var id = $(this).attr("data-idproveedor");
             var ajax = $.ajax({
                 type: 'POST',
                 data: {id: id},
-                url: '{{ route("bajaperfil") }}',
+                url: '{{ route("bajaprov") }}',
                 async: false,
                 beforeSend: function(){
                     mostrarLoading();

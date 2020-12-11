@@ -48,11 +48,11 @@
 <script>
 var buttonCommon = {
         exportOptions: {
-            columns: [0,1,2,3],
+            columns: [0,1,2,3,4],
             format: {
                 body: function (data, row, column, node) {
                     // if it is select
-                    if (column == 3) {
+                    if (column == 5) {
                         return $(data).find("option:selected").text()
                     } else return data
                 }

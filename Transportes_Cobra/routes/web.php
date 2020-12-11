@@ -91,4 +91,11 @@ Route::group(['prefix' => 'custodia'], function(){
 /**proveedores */
 Route::group(['prefix' => 'proveedores'], function(){
     Route::get('/lista', 'ProveedoresController@index')->name('proveedores');
+    Route::get('/anyData', 'ProveedoresController@anyData')->name('listproveedor');
+    Route::get('/nuevo',  'ProveedoresController@altaproveedor')->name('nuevoproveedor');
+    Route::get('/optser',  'ProveedoresController@optserv')->name('optser');
+    Route::post('store', 'ProveedoresController@stored')->name('storedprov');
+    Route::post('/baja',  'ProveedoresController@bajaProv')->name('bajaprov');
+    Route::get('/editar/{id}',  'ProveedoresController@updproveedor')->name('editproveedor');
+    Route::post('/update',  'ProveedoresController@modificacionproveedor')->name('updateproveedor');
 });

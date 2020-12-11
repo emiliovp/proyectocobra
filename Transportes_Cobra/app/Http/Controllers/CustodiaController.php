@@ -5,11 +5,13 @@ use Session;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
+
 use App\RelSolicitudCustodiaProveedor;
 use App\RelServiciosSolicitudProveedor;
 use App\datosControlInventario;
 use App\RelServicioSolicitud;
+use App\LogMovimiento;
 use App\CalUserLogin;
 use App\CatOpciones;
 use App\Solicitud;
@@ -23,7 +25,8 @@ class CustodiaController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
+        $this->ip_cliente = ipAddress();
     }
 
     /**
@@ -33,6 +36,18 @@ class CustodiaController extends Controller
      */
     public function index()
     {
+        $mov = new LogMovimiento;
+        $usr = new CalUserLogin;
+        $id = Auth::user()->usuario_id;
+        $data = $usr->getuserid($id);
+        $data = array(
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$data[0]['username'].' visualizó lista de custodias.',
+            'tipo' => 4,
+            'id_user' => $id
+        );
+        $bitacora = new LogMovimiento;
+        $bitacora->setMovimiento($data);
         return view('custodias.lista');
     }
     public function anyData()
@@ -86,6 +101,17 @@ class CustodiaController extends Controller
                 }
             }
         }
+        $usr = new CalUserLogin;
+        $idusrlog = Auth::user()->usuario_id;
+        $datausrlog = $usr->getuserid($idusrlog);
+        $datalog = array(
+        'ip_address' => $this->ip_cliente, 
+        'descripcion' => 'El usuario '.$datausrlog[0]['username'].' realizó la asignación de custodias a la solicitud con el folio:'.$sol_id.'.',
+        'tipo' => 1,
+        'id_user' => $idusrlog
+        );
+        $bitacora = new LogMovimiento;
+        $bitacora->setMovimiento($datalog);
         Session::flash('success', 'La operación se ha realizado con exito');
         return redirect('custodia/lista');
     }

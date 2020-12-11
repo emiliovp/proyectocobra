@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 use Session;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Crypt;
+
 use App\RelServiciosSolicitudProveedor;
 use App\datosControlInventario;
 use App\RelServicioSolicitud;
+use App\LogMovimiento;
 use App\CalUserLogin;
 use App\CatOpciones;
 use App\Solicitud;
@@ -22,7 +25,8 @@ class ServicioController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
+        $this->ip_cliente = ipAddress();
     }
 
     /**
@@ -32,6 +36,18 @@ class ServicioController extends Controller
      */
     public function index()
     {
+        $mov = new LogMovimiento;
+        $usr = new CalUserLogin;
+        $id = Auth::user()->usuario_id;
+        $data = $usr->getuserid($id);
+        $data = array(
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$data[0]['username'].' visualizó lista de operaciones de servicio.',
+            'tipo' => 4,
+            'id_user' => $id
+        );
+        $bitacora = new LogMovimiento;
+        $bitacora->setMovimiento($data);
         return view('servicios.lista');  //->with(['alat' => 0]);
     }
     public function anyData()
@@ -71,11 +87,6 @@ class ServicioController extends Controller
             $descripciones = explode('_',$descripcion);
             $dataProvSol = array();
             foreach ($proveedores as $key => $prov) {
-                /*$dataProvSol['servicios_solicitud_id'] = $servicio;
-                $dataProvSol['proveedor_id'] = $prov;
-                $dataProvSol['descripcion'] = $descripciones[$key];
-                //$dataProvSol['adicional'] = $servicio;
-                dd($request->post(),$dataProvSol);*/
                 $result = $b->setRelProvServicioSol($servicio,$prov,$descripciones[$key]);
                 if ($result == false) {
                     Session::flash('excepcionerror', 'Error al realizar la operación, favor de volver a intentarlo');
@@ -88,6 +99,17 @@ class ServicioController extends Controller
             Session::flash('excepcionerror', 'Error al realizar la operación, favor de volver a intentarlo');
             return redirect()->back()->withInput();
         }
+        $usr = new CalUserLogin;
+        $idusrlog = Auth::user()->usuario_id;
+        $datausrlog = $usr->getuserid($idusrlog);
+        $datalog = array(
+        'ip_address' => $this->ip_cliente, 
+        'descripcion' => 'El usuario '.$datausrlog[0]['username'].' realizó la asignación de  servicios a la solicitud con el folio:'.$sol_id.'.',
+        'tipo' => 1,
+        'id_user' => $idusrlog
+        );
+        $bitacora = new LogMovimiento;
+        $bitacora->setMovimiento($datalog);
         Session::flash('success', 'La operación se ha realizado con exito');
         return redirect('servicio/lista');
 

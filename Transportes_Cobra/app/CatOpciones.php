@@ -119,4 +119,29 @@ class CatOpciones extends Model
         ->get()
         ->toArray();
     }
+    public function getProveedorServicio($id){
+        return DB::table('cat_opciones')
+        ->leftjoin('cat_opciones as b','b.cat_opciones_id','=','cat_opciones.id')
+        ->leftjoin('rel_proveedor_cat_opciones','rel_proveedor_cat_opciones.cat_opciones_id','=','b.id')
+        ->leftjoin('proveedor','proveedor.id','=','rel_proveedor_cat_opciones.proveedor_id')
+        ->select('rel_proveedor_cat_opciones.id AS id_control', 'proveedor.id as id_proveedor',
+        'b.id as tipo_servicio_id', 'b.nombre as tipo_servicio', 'cat_opciones.id as id_servicio',
+        DB::raw("concat(cat_opciones. nombre, ' / ', b.nombre) as nombre"))
+        ->where('proveedor.id', '=', $id)
+        //->where('a.estatus','=',1)
+        ->get()
+        ->toArray();
+    }
+    public function getIdsProveedorServicio($id){
+        return DB::table('cat_opciones')
+        ->leftjoin('cat_opciones as b','b.cat_opciones_id','=','cat_opciones.id')
+        ->leftjoin('rel_proveedor_cat_opciones','rel_proveedor_cat_opciones.cat_opciones_id','=','b.id')
+        ->leftjoin('proveedor','proveedor.id','=','rel_proveedor_cat_opciones.proveedor_id')
+        ->select(
+        DB::raw("group_concat(rel_proveedor_cat_opciones.cat_opciones_id separator '_') as id_control"))
+        ->where('proveedor.id', '=', $id)
+        //->where('a.estatus','=',1)
+        ->get()
+        ->toArray();
+    }
 }

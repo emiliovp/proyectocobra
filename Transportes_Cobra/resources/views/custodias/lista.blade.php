@@ -56,10 +56,10 @@
 <script>
 var buttonCommon = {
         exportOptions: {
-            columns: [0,1,2],
+            columns: [0,1,2,3,4,5],
             format: {
                 body: function (data, row, column, node) {
-                    if (column == 3) {
+                    if (column == 6) {
                         return $(data).find("option:selected").text()
                     } else return data
                 }

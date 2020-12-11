@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .card-body {
+        padding: 0.5rem 1.25rem;
+    }
+    label.error {
+        font-size: 8pt;
+        color: red;
+    }
+    .remover_campo {
+        margin: auto;
+        position: relative;
+        border: 2px;
+    }
+    .divselectmultiple {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
 <form method="POST" action="{{route('updateperfil')}}" id="perfilupdate" accept-charset="UTF-8" enctype="multipart/form-data">
 @csrf
     <div class="container-fluid">
@@ -32,8 +50,8 @@
                                 @endif                     
                             </div>
                             <div class="col-md-4">
-                                <label for="descipcion">Descripci&oacute;n:</label>
-                                <input tipe="text" class="form-control lg-4" id="descipcion" name="descipcion" value="{{ $info['descper'] }}">
+                                <label for="descripcion">Descripci&oacute;n:</label>
+                                <input tipe="text" class="form-control lg-4" id="descripcion" name="descripcion" value="{{ $info['descper'] }}">
                             </div>
                             <div class="col-md-4">
                                 <label for="area">Área:</label>
@@ -44,7 +62,7 @@
                                             $selected = "";
                                         @endphp
                                         @if ($errors)
-                                            @if($val['id'] == !empty(old('area')) ? old('area') : $info['idarea'])
+                                            @if($val['id'] == $info['idarea'])
                                                 @php
                                                     $selected = "selected";
                                                 @endphp

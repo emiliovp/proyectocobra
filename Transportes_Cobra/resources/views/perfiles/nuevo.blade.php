@@ -1,6 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .card-body {
+        padding: 0.5rem 1.25rem;
+    }
+    label.error {
+        font-size: 8pt;
+        color: red;
+    }
+    .remover_campo {
+        margin: auto;
+        position: relative;
+        border: 2px;
+    }
+    .divselectmultiple {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
 <form method="POST" action="{{route('storedper')}}" id="form-sol" accept-charset="UTF-8" enctype="multipart/form-data">
 @csrf
 <div class="container-fluid">
