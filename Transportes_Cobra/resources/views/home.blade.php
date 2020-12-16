@@ -61,6 +61,9 @@
                                         </a>
                                     @endforeach
                                 @endif
+                                @if($hijo == 1)
+                                <a href="{{ route('home') }}" class="list-group-item list-group-item-action">REGRESAR AL MENÚ PRINCIPAL</a>
+                                @endif
                             </ul>
                         </div>
                     </div>
