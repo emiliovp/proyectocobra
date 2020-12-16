@@ -71,7 +71,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12 text-right">
-                            <a href="{{ route('proveedores') }}" id="regresar" class="btn btn-warning">Regresar</a>
+                            <a href="{{ route('clientes') }}" id="regresar" class="btn btn-warning">Regresar</a>
                             <button type="submit" class="btn btn-primary update" id="enviar" >Guardar</button>
                         </div>
                     </div>

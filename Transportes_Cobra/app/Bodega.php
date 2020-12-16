@@ -35,4 +35,25 @@ class Bodega extends Model
         ->whereRaw('bodega.id NOT IN (SELECT rel_cliente_bodega.bodega_id FROM rel_cliente_bodega WHERE estatus = 1)')
         ->get()->toArray();
     }
+    public function getbodegaslibresdesc(){
+        return bodega::select('id', 'clave','dimensiones',
+            DB::raw("case 
+            when tipoBodega = 1 then 'Espacios compartidos'
+            when tipoBodega = 2 then 'Espacio de un contenedor fijo'
+            when tipoBodega = 3 then 'Mini bodegas'
+            when tipoBodega = 4 then 'Espacios mayoreas a 180 mts cuadrados fijos'
+            when tipoBodega = 5 then 'Cross dock' 
+            end as tipo_bodega"),
+            DB::raw("concat(clave,' / ', case 
+            when tipoBodega = 1 then 'Espacios compartidos'
+            when tipoBodega = 2 then 'Espacio de un contenedor fijo'
+            when tipoBodega = 3 then 'Mini bodegas'
+            when tipoBodega = 4 then 'Espacios mayoreas a 180 mts cuadrados fijos'
+            when tipoBodega = 5 then 'Cross dock' 
+            end) nombreBodega")
+        )
+        ->where('estatus','=',1)
+        ->whereRaw('bodega.id NOT IN (SELECT rel_cliente_bodega.bodega_id FROM rel_cliente_bodega WHERE estatus = 1)')
+        ->get()->toArray();
+    }
 }

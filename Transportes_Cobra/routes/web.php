@@ -109,3 +109,13 @@ Route::group(['prefix' => 'clientes'], function(){
     Route::get('/editar/{id}',  'ClientesController@updCliente')->name('editcliente');
     Route::post('/update',  'ClientesController@modificacionCliente')->name('updatecliente');
 });
+/**contratos */
+Route::group(['prefix' => 'contratos'], function(){
+    Route::get('/lista', 'ContratosController@index')->name('contratos');
+    Route::get('/anyData', 'ContratosController@anyData')->name('listcontratos');
+    Route::get('/nuevo',  'ContratosController@altaCliente')->name('nuevocontrato');
+    Route::post('store', 'ContratosController@stored')->name('storedcontrato');
+    Route::post('/baja',  'ContratosController@bajaContrato')->name('bajacontrato');
+    Route::get('/ver/{id}',  'ContratosController@verCliente')->name('vercontrato');
+    Route::post('/update',  'ContratosController@modificacionCliente')->name('updatecontrato');
+});

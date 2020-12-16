@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class RelClienteBodega extends Model
+class RelClienteContrato extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -15,33 +15,24 @@ class RelClienteBodega extends Model
     protected $fillable = [
         'id', 
         'cliente_id', 
-        'bodega_id ',
-        'contrato_id',
+        'contrato_id ',
         'estatus'
     ];
-    protected $table = "rel_cliente_bodega";
+    protected $table = "rel_cliente_contrato";
     protected $hidden = [];
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    public function getBodegaCliente($cliente, $bodega_id){
-        $sql = RelClienteBodega::where('cliente_id','=', $cliente)
-        ->where('bodega_id','=', $bodega_id)
-        ->get()
-        ->toArray();
-        return $sql;
-    }
-    public function setbodegacliente($cliente, $bodega_id, $contrato_id = null){
-        try {
-            $clientebodega = new RelClienteBodega;
+    public function setclientecontrato($cliente, $contrato_id){
+        //try {
+            $clientebodega = new RelClienteContrato;
             $clientebodega->cliente_id = $cliente;
-            $clientebodega->bodega_id = $bodega_id;
             $clientebodega->contrato_id = $contrato_id;
             $clientebodega->save();
             $data = $clientebodega->id;
             return $data;
-        } catch (\Throwable $th) {
+        /*} catch (\Throwable $th) {
             return false;
-        }
+        }*/
     }
 }
