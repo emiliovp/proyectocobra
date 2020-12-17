@@ -29,11 +29,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Dependencia con otra opción</th>
                                     <th>Opción</th>
                                     <th>Estado</th>
                                     <th>Fecha de creación</th>
                                     <th># de Jerarquía</th>
-                                    <th>Dependencia con otra opción</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -76,12 +76,12 @@ var buttonCommon = {
         serverSide: true,
         ajax: '{!! route("dataIndexOptCat", ["id" => $id]) !!}',
         columns: [
-            {data: 'id', name: 'id'},
-            {data: 'nombre', name: 'nombre'}, 
+            {data: 'id', name: 'id'}, 
+            {data: 'dependencia', name: 'dependencia'},
+            {data: 'opcion', name: 'opcion'}, 
             {data: 'estatus', name: 'estatus'},
             {data: 'created_at', name: 'created_at'}, 
             {data: 'jerarquia', name: 'jerarquia'}, 
-            {data: 'dependencia', name: 'dependencia'}, 
             {
                 render: function (data,type,row) {
                     var html = '';

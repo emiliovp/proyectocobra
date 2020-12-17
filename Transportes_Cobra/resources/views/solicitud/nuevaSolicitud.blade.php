@@ -235,7 +235,7 @@
                     <a href="{{ route('solicitud') }}" class="btn btn-warning btn-block" style="color:#FFFFFF;">{{ __('Regresar') }}</a>
                 </div>
                 <div class="col-md-6">
-                    <input type="button" value="Guardar FUS" id="enviar" class="form-control btn btn-primary" />
+                    <input type="button" value="Guardar" id="enviar" class="form-control btn btn-primary" />
                 </div>
             </div>    
         </div>
@@ -245,6 +245,8 @@
 @endsection
 @push('scripts')
 <script src="{{ asset('js/jquery_validate/jquery.validate.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('js/datetimepicker/jquery.datetimepicker.css') }}"/>
+<script src="{{ asset('js/datetimepicker/build/jquery.datetimepicker.full.min.js') }}"></script>
 <script>
 $.validator.messages.required = 'El campo es requerido.';
 
@@ -278,7 +280,7 @@ $('#form-solicitud').validate({
         setTimeout(form.submit(), 500);
     }
 });
-$.datepicker.regional['es'] = {
+/*$.datepicker.regional['es'] = {
  closeText: 'Cerrar',
  prevText: '< Ant',
  nextText: 'Sig >',
@@ -300,6 +302,9 @@ $.datepicker.regional['es'] = {
  $.datepicker.setDefaults($.datepicker.regional['es']);
 $(function () {
     $('#fecprogramada').datepicker();
+});*/
+$(function () {
+    $('#fecprogramada').datetimepicker();
 });
 $(document).on('change','#tservicio', function(){
     var opt = $(this).val();

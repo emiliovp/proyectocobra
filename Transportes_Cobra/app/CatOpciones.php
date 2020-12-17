@@ -33,8 +33,9 @@ class CatOpciones extends Model
             'a.jerarquia',
             'a.created_at',
             'a.catalogo_id',
+            'a.nombre as opcion',
         DB::raw('if(a.cat_opciones_id is null, a.nombre, concat(b.nombre," - ", a.nombre)) as nombre'),
-        DB::raw('if(a.cat_opciones_id is null, "--",concat(b.nombre," - ", a.nombre)) as dependencia'),
+        DB::raw('if(a.cat_opciones_id is null, "--",b.nombre) as dependencia'),
         DB::raw('CASE
             WHEN a.estatus = 1 THEN "Activo"
             WHEN a.estatus = 2 THEN "Bloqueado"

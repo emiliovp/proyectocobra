@@ -151,7 +151,7 @@
                     <a href="{{ route('servicios') }}" class="btn btn-warning btn-block" style="color:#FFFFFF;">{{ __('Regresar') }}</a>
                 </div>
                 <div class="col-md-6">
-                    <input type="button" value="Guardar FUS" id="enviar" class="form-control btn btn-primary" />
+                    <input type="button" value="Guardar" id="enviar" class="form-control btn btn-primary" />
                 </div>
             </div>    
         </div>

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Auth;
+use App\LogMovimiento;
+use App\CalUserLogin;
 use App\CatOpciones;
 use App\Catalogo;
 use Session;
@@ -17,7 +20,8 @@ class OpcionesCatalogosController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
+        $this->ip_cliente = ipAddress();
     }
 
     /**
@@ -27,23 +31,18 @@ class OpcionesCatalogosController extends Controller
      */
     public function index(Request $request)
     {
-        //dd($request->id);
-       /* $noEmployee = (isset(Auth::user()->noEmployee) && Auth::user()->noEmployee != 0) ? Auth::user()->noEmployee : 1;
-        $idEmployee = getIdUserLogin(Auth::user()->noEmployee);
-        
-        if($idEmployee == 0) {
-            $idEmployee = null;
-        }
-
+        $mov = new LogMovimiento;
+        $usr = new CalUserLogin;
+        $id = Auth::user()->usuario_id;
+        $data = $usr->getuserid($id);
         $data = array(
-            'ip_address' => $this->ip_address_client, 
-            'description' => 'Empleado con #'.$noEmployee.' visualizó lista de opciones de catálogo.',
-            'tipo' => 'vista',
-            'id_user' => $idEmployee
+            'ip_address' => $this->ip_cliente, 
+            'descripcion' => 'El usuario '.$data[0]['username'].' visualizó lista de opciones del catalogo con el id: '.$request->id.'.',
+            'tipo' => 4,
+            'id_user' => $id
         );
-        
-        $bitacora = new LogBookMovements;
-        $bitacora->guardarBitacora($data);*/ 
+        $bitacora = new LogMovimiento;
+        $bitacora->setMovimiento($data);
         return view('catalogos.listaopciones')->with(['id' => $request->id]);
     }
     public function dataIndexOptCat(Request $request) {
