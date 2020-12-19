@@ -35,12 +35,12 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    Alta de cliente.
+                    Alta de contrato.
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="cliente">cliente cliente</label>
+                            <label for="cliente">Cliente</label>
                             <input type="hidden" name="idcliente" id="idcliente"/>
                             <input class="form-control campo-requerido autocomplete" data-type="cliente" id="cliente" name="cliente"/>
                         </div>
